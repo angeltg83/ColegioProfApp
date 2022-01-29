@@ -1,0 +1,98 @@
+<form autocomplete="off" [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+    <p-dialog *ngIf="!loading" header={{tituloForm}} [(visible)]="showModalNuevoUsuario" [modal]="true"
+        [baseZIndex]="10000" [style]="{ width: '800px' }" [draggable]="false" [resizable]="false" (onHide)="onHide()">
+
+        <div class="card">
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="nombre">Nombres<sup style="color: red;">*</sup></label>
+                    <input formControlName="nombres" id="nombre" type="text" placeholder="Ingresar nombres" pInputText
+                        [ngClass]="{'ng-invalid ng-dirty':usuarioForm.get('nombres')?.invalid && (usuarioForm.get('nombres')?.dirty ||  usuarioForm.get('nombres')?.touched) }"
+                        class="inputfield w-full">
+                    <div
+                        *ngIf="usuarioForm.get('nombres')?.invalid && (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="apellidos">Apellidos<sup style="color: red;">*</sup></label>
+                    <input formControlName="apellidos" id="apellidos" type="text" placeholder="Ingrese apellidos"
+                        [ngClass]="{'ng-invalid ng-dirty':usuarioForm.get('apellidos')?.invalid && (usuarioForm.get('apellidos')?.dirty ||  usuarioForm.get('apellidos')?.touched) }"
+                        pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="usuarioForm.get('apellidos')?.invalid && (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+                <div class="field col-12">
+                    <label for="email">Correo electrónico<sup style="color: red;">*</sup></label>
+                    <input formControlName="email" id="email" type="email" placeholder="Ingrese correo electrónico"
+                        [ngClass]="{'ng-invalid ng-dirty':usuarioForm.get('email')?.invalid && (usuarioForm.get('email')?.dirty ||  usuarioForm.get('email')?.touched) }"
+                        pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="usuarioForm.get('email')?.invalid && (usuarioForm.get('email')?.dirty || usuarioForm.get('email')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="username">Usuario<sup style="color: red;">*</sup></label>
+                    <input autocomplete="off" formControlName="username" placeholder="Ingrese usuario" id="username"
+                        [ngClass]="{'ng-invalid ng-dirty':usuarioForm.get('username')?.invalid && (usuarioForm.get('username')?.dirty ||  usuarioForm.get('username')?.touched) }"
+                        type="text" pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="usuarioForm.get('username')?.invalid && (usuarioForm.get('username')?.dirty || usuarioForm.get('username')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+                <div *ngIf="tipo==='N'" class="field col-12 md:col-6">
+                    <label for="contrasena">Contraseña<sup style="color: red;">*</sup></label>
+                    <input type="password" pInputText autocomplete="off" formControlName="password" id="contrasena"
+                        [ngClass]="{'ng-invalid ng-dirty':usuarioForm.get('password')?.invalid && (usuarioForm.get('password')?.dirty ||  usuarioForm.get('password')?.touched) }"
+                        placeholder="Ingrese contraseña" class="inputfield w-full">
+                    <div
+                        *ngIf="usuarioForm.get('password')?.invalid && (usuarioForm.get('password')?.dirty || usuarioForm.get('password')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+
+                    <div *ngIf="usuarioForm.get('password')?.hasError('minlength')">
+                        <span style="color: red; font-size: 11px">Campo debe tener más de 6 carácteres</span>
+                    </div>
+
+
+                </div>
+
+                <div *ngIf="tipo==='N'" class="field col-12 md:col-6">
+                    <label for="repeatPassword">Repetir contraseña<sup style="color: red;">*</sup></label>
+                    <input type="password" pInputText autocomplete="off" formControlName="repeatPassword"
+                        id="repeatPassword"
+                        [ngClass]="{'ng-invalid ng-dirty':usuarioForm.get('repeatPassword')?.invalid && (usuarioForm.get('repeatPassword')?.dirty ||  usuarioForm.get('repeatPassword')?.touched) }"
+                        placeholder="Ingrese contraseña" class="inputfield w-full">
+                    <div
+                        *ngIf="usuarioForm.get('repeatPassword')?.invalid && (usuarioForm.get('repeatPassword')?.dirty || usuarioForm.get('repeatPassword')?.touched  ) && !usuarioForm.get('repeatPassword')?.errors?.mustMatch ">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                    <div *ngIf="usuarioForm.get('repeatPassword')?.errors?.mustMatch">
+                        <span style="color: red; font-size: 11px">Contraseñas no coinciden</span>
+                    </div>
+
+                </div>
+
+                <div *ngIf="tipo!=='N'" class="field col-12">
+                    <p-checkbox label="Estado" formControlName="estado_registro" [binary]="true"></p-checkbox>
+                </div>
+            </div>
+
+        </div>
+
+        <ng-template pTemplate="footer">
+            <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cancelar"></p-button>
+
+            <p-button *ngIf="tipo!=='V'" type="submit" styleClass="p-button-success" label="Guardar"
+                class="p-button-text" icon="pi pi-save"></p-button>
+
+        </ng-template>
+
+    </p-dialog>
+</form>
+<p-toast></p-toast>

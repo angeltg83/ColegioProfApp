@@ -1,0 +1,50 @@
+<p-toast></p-toast>
+<div class="login-form">
+    <mat-card class="login-box">
+        <mat-card-content>
+            <div class="card">
+                <div class="flex justify-content-center flex-wrap card-container yellow-container">
+                    <div id="logo" class="flex align-items-center justify-content-center w-4rem h-4rem m-2">
+                    </div>
+                </div>
+            </div>
+            <div class="loginbox-title">Inicio de Sesión</div>
+            <p-divider></p-divider>
+            <form autocomplete="off" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                <div class="p-field p-col-12 p-md-6 separator">
+                    <span class="p-input-icon-left full-width-input">
+                        <i class="pi pi-user"></i>
+                        <input autocomplete="off" required formControlName="username" type="text" id="inputUsername"
+                            pInputText class="full-width-input" placeholder="Username">
+                    </span>
+                    <span *ngIf="isValidField('username')">
+                        <div style="text-align: left; font-size: 11px; color:#f44336;">
+                            {{getErrorMessage('username')}}
+
+                        </div>
+                    </span>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6 separator">
+                    <span class="p-input-icon-left full-width-input">
+                        <i class="pi pi-lock"></i>
+                        <input autocomplete="off" required formControlName="contrasena" type="password" pPassword
+                            [feedback]="false" id="inputPassword" class="full-width-input" placeholder="Contraseña">
+                    </span>
+
+                    <span *ngIf="isValidField('contrasena')">
+                        <div style="text-align: left; font-size: 12px; color:#f44336;">
+                            {{getErrorMessage('contrasena')}}
+                        </div>
+                    </span>
+                </div>
+
+
+                <button [disabled]="loginForm.invalid || loading" [label]="loading?'Ingresando...':'Ingresar'" pButton
+                    type="submit" class="full-width-input p-button-help">
+                </button>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

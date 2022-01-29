@@ -1,0 +1,83 @@
+<p-toast></p-toast>
+<div class="mt-2 mr-2 ml-2">
+    <p-panel header="Usuarios del sistema" class="p-mt-5 tab-padding-0" [toggleable]="false">
+        <p-table #dt styleClass="p-datatable-gridlines p-datatable-responsive-demo" [value]="data" [lazy]="true"
+            (onLazyLoad)="loadUsers($event)" [totalRecords]="totalRecords" [paginator]="true" [rows]="10"
+            [showCurrentPageReport]="true" [paginator]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+            [rowsPerPageOptions]="[10,25,50]">
+
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0"></h5>
+                    <div class="p-flexp-d-flex p-mt-2 p-mb-2"
+                        style="display: flex; justify-content: right; align-items: right">
+                        <p-button *ngIf="permisoNuevo|async" (click)="visualizarFormUsuario()" label="Nuevo"
+                            class="p-mr-2 p-mb-2" styleClass="p-button-info"></p-button>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 50px;">Id</th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Nombres
+                            <p-columnFilter type="text" field="nombres"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Apellidos
+                            <p-columnFilter type="text" field="apellidos"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Email
+                            <p-columnFilter type="text" field="email"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th style="width: 50px">Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+                <tr [pSelectableRow]="user">
+                    <td style="width: 50px;">{{ user.id }}</td>
+                    <td>{{ user.nombres }}</td>
+                    <td>{{ user.apellidos }}</td>
+                    <td>{{ user.email }}</td>
+                    <td style="width: 50px">
+                        <p-tag *ngIf="user.estado_registro" styleClass="p-mr-2" severity="success" value="Activo">
+                        </p-tag>
+                        <p-tag *ngIf="!user.estado_registro" styleClass="p-mr-2" severity="danger" value="Inactivo">
+                        </p-tag>
+                    </td>
+
+                    <td>
+                        <button *ngFor="let i of user.acciones" pButton pRipple type="button" icon={{i.icon}}
+                            pTooltip={{i.label}} tooltipPosition="top" (click)="handleAction(i.metodo,user)"
+                            class="p-button-rounded p-button-secondary p-button-text"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6">Resultados no encontrados.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
+</div>
+
+<app-form-usuario *ngIf="showModalNuevoUser" tipo="N" tituloForm="Nuevo usuario"
+    [showModalNuevoUsuario]="showModalNuevoUser" (propagar)="getStaus($event)"></app-form-usuario>
+
+
+<app-form-usuario *ngIf="showModalEditUser" tipo="E" tituloForm="Editar usuario" [form]="form"
+    (refres)="getRefresh($event)" [showModalNuevoUsuario]="showModalEditUser" (propagar)="getStaus($event)">
+</app-form-usuario>
+
+<app-form-usuario *ngIf="showModalVerUser" tipo="V" tituloForm="Editar usuario" [form]="form"
+    [showModalNuevoUsuario]="showModalVerUser" (propagar)="getStaus($event)"></app-form-usuario>

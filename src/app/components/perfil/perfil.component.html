@@ -1,0 +1,53 @@
+<p-toast></p-toast>
+<form [formGroup]="perfilForm" (ngSubmit)="onSubmit()">
+    <p-dialog *ngIf="!loading" header={{tituloForm}} [(visible)]="showModalNuevoPerfil" [modal]="true"
+        [style]="{ width: '600px' }" [draggable]="false" [resizable]="false" (onHide)="onHide()">
+        <div class="p-fluid p-field">
+            <div class="p-panel-content">
+                <div class="p-field p-grid p-mb-12 spacer">
+                    <label class="p-col-12 p-md-3 p-mb-md-0">Nombre:</label>
+                    <div class="p-col-12 p-md-6">
+                        <input formControlName="nombre" pInputText type="text"
+                            placeholder="Ingrese nombre del rol" />
+                        <div
+                            *ngIf="perfilForm.get('nombre')?.invalid && (perfilForm.get('nombre')?.dirty || perfilForm.get('nombre')?.touched)">
+                            <span style="color: red; font-size: 11px">Campo requerido</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-grid p-mb-12 spacer">
+                    <label class="p-col-12 p-md-3 p-mb-md-0">Descripción:</label>
+                    <div class="p-col-12 p-md-6">
+                        <input formControlName="descripcion" pInputText type="text"
+                            placeholder="Ingrese la descripción del rol" />
+                        <div
+                            *ngIf="perfilForm.get('descripcion')?.invalid && (perfilForm.get('descripcion')?.dirty || perfilForm.get('descripcion')?.touched)">
+                            <span style="color: red; font-size: 11px">Campo requerido</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div *ngIf="tipo!=='N'" class="p-field p-grid p-mt-4 p-mb-12">
+
+                    <div class="p-col-12 p-md-6">
+                        <p-checkbox label="Estado" formControlName="estado_registro" [binary]="true"></p-checkbox>
+
+                    </div>
+                </div>
+
+                <br />
+            </div>
+        </div>
+
+        <ng-template pTemplate="footer">
+            <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cancelar"></p-button>
+
+            <p-button *ngIf="tipo!=='V'" type="submit" styleClass="p-button-success" label="Guardar"
+                class="p-button-text" icon="pi pi-save"></p-button>
+
+        </ng-template>
+
+    </p-dialog>
+</form>

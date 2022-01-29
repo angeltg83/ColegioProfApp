@@ -1,0 +1,227 @@
+<form autocomplete="off" [formGroup]="ingresoCajaForm" (ngSubmit)="onSubmit()">
+
+
+    <p-dialog *ngIf="!loading" header={{tituloForm}} [(visible)]="showModalNuevoUsuario" [modal]="true"
+        [baseZIndex]="10000" [style]="{ width: '800px' }" [draggable]="false" [resizable]="false" (onHide)="onHide()">
+
+        <div class="card">
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="tip_identificacion">Tipo de identificación<sup style="color: red;">*</sup></label>
+                    <br>
+                    <p-dropdown appendTo="body" [filter]="true" [showClear]="true" [options]="tipo_identificacion$"
+                        (onChange)="cambioTipoIdentificacion($event)" formControlName="tipoIdentificacion"
+                        placeholder="Seleccione el tipo identificación" autoWidth="false" [style]="{'width':'100%'}"
+                        optionValue="id" optionLabel="descripcion">
+                    </p-dropdown>
+                </div>
+                
+                <div class="field col-12 md:col-6">
+                    <label for="ident">Identificación<sup style="color: red;">*</sup></label>
+                    <div class="p-inputgroup">
+                        <input formControlName="identificacion" id="iden" type="text"
+                            placeholder="Ingresar la identificación" pInputText
+                            [ngClass]="{'ng-invalid ng-dirty':ingresoCajaForm.get('identificacion')?.invalid && (ingresoCajaForm.get('identificacion')?.dirty ||  ingresoCajaForm.get('identificacion')?.touched) }"
+                            class="inputfield w-full">
+                        <button (click)="getCliente()" type="button" pButton pRipple icon="pi pi-search"
+                            styleClass="p-button-info"></button>
+                    </div>
+                    <div
+                        *ngIf="ingresoCajaForm.get('identificacion')?.invalid && (ingresoCajaForm.get('identificacion')?.dirty || ingresoCajaForm.get('identificacion')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+
+                    <span *ngIf="ingresoCajaForm.get('identificacion')?.errors?.maxlength" style="color: red; font-size: 11px">Debe ingresar {{ingresoCajaForm.get('identificacion')?.errors?.maxlength?.requiredLength }} digitos </span>
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="nombres">Nombres<sup style="color: red;">*</sup></label>
+                    <input formControlName="nombres" id="nombres" type="text" placeholder="Ingrese nombres"
+                        [ngClass]="{'ng-invalid ng-dirty':ingresoCajaForm.get('nombres')?.invalid && (ingresoCajaForm.get('nombres')?.dirty ||  ingresoCajaForm.get('nombres')?.touched) }"
+                        pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="ingresoCajaForm.get('apellidos')?.invalid && (ingresoCajaForm.get('apellidos')?.dirty || ingresoCajaForm.get('apellidos')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="apellidos">Apellidos<sup style="color: red;">*</sup></label>
+                    <input formControlName="apellidos" id="apellidos" type="text" placeholder="Ingrese apellidos"
+                        [ngClass]="{'ng-invalid ng-dirty':ingresoCajaForm.get('apellidos')?.invalid && (ingresoCajaForm.get('apellidos')?.dirty ||  ingresoCajaForm.get('apellidos')?.touched) }"
+                        pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="ingresoCajaForm.get('apellidos')?.invalid && (ingresoCajaForm.get('apellidos')?.dirty || ingresoCajaForm.get('apellidos')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="telefono">Teléfono</label>
+                    <input formControlName="telefono" id="telefono" type="text" placeholder="Ingrese el teléfono"
+                        pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="ingresoCajaForm.get('telefono')?.invalid && (ingresoCajaForm.get('telefono')?.dirty || ingresoCajaForm.get('telefono')?.touched)">
+                        <span *ngIf="ingresoCajaForm.get('telefono')?.hasError('minlength')"
+                            style="color: red; font-size: 11px">Teléfono inválido</span>
+                    </div>
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="fechaNac">Fecha nacimiento<sup style="color: red;">*</sup></label> <br>
+                    <p-calendar formControlName="fecha_nacimiento" appendTo="body" inputId="dateformat"
+                        [maxDate]="fecha_minina_cita_nueva" placeholder="Ingrese fecha de nacimiento"
+                        [style]="{ width: '100%' }" dateFormat="yy/mm/dd"></p-calendar>
+                    <div
+                        *ngIf="ingresoCajaForm.get('fecha_nacimiento')?.invalid && (ingresoCajaForm.get('fecha_nacimiento')?.dirty || ingresoCajaForm.get('fecha_nacimiento')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="correo">Correo electrónico</label>
+                    <input formControlName="correo" id="correo" type="correo" placeholder="Ingrese correo electrónico"
+                        [ngClass]="{'ng-invalid ng-dirty':ingresoCajaForm.get('correo')?.invalid && (ingresoCajaForm.get('correo')?.dirty ||  ingresoCajaForm.get('correo')?.touched) }"
+                        pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="ingresoCajaForm.get('correo')?.invalid && (ingresoCajaForm.get('correo')?.dirty || ingresoCajaForm.get('correo')?.touched)">
+                        <small class="text-danger" style="color: red;"
+                            *ngIf="ingresoCajaForm.get('correo')?.errors?.email">Correo eléctronico no
+                            valido</small>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="direccion">Dirección<sup style="color: red;">*</sup></label>
+                    <input formControlName="direccion" id="direccion" type="direccion" placeholder="Ingrese dirección"
+                        [ngClass]="{'ng-invalid ng-dirty':ingresoCajaForm.get('direccion')?.invalid && (ingresoCajaForm.get('direccion')?.dirty ||  ingresoCajaForm.get('direccion')?.touched) }"
+                        pInputText class="inputfield w-full">
+                    <div
+                        *ngIf="ingresoCajaForm.get('direccion')?.invalid && (ingresoCajaForm.get('direccion')?.dirty || ingresoCajaForm.get('direccion')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="id_doctor">Doctor<sup style="color: red;">*</sup></label>
+                    <p-dropdown formControlName="doctor_id" appendTo="body" [filter]="true" [showClear]="true"
+                        [options]="DoctorSelect$ |async" (onChange)="getHorarioDoctor($event)"
+                        placeholder="Seleccione el doctor" [style]="{'width':'100%'}" optionValue="id"
+                        optionLabel="nombre_completo">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="tipo_consulta_id">Tipo consulta<sup style="color: red;">*</sup></label>
+                    <p-dropdown formControlName="tipo_consulta" appendTo="body" [filter]="true" [showClear]="true"
+                        emptyMessage="Resultados no encontrados" [options]="tipo_consulta_select$ | async"
+                        autoWidth="false" placeholder="Seleccione" optionLabel="descripcion" autoWidth="false"
+                        [style]="{'width': '100%'}">
+                    </p-dropdown>
+                </div>
+                <div *ngIf="!ingresoCajaForm.get('doctor_id')?.invalid" class="field col-12 md:col-6">
+                    <label for="fechaReser">Fecha reserva<sup style="color: red;">*</sup></label> <br>
+                    <p-calendar formControlName="fecha_reserva" appendTo="body" inputId="dateformat" [locale]="es"
+                        [disabledDays]="[0]" [readonlyInput]="true" (onSelect)="getHorarioDiponibleXDia($event)"
+                        [minDate]="fecha_minina_cita_nueva" [style]="{ width: '100%' }" dateFormat="yy/mm/dd">
+                    </p-calendar>
+                    <div
+                        *ngIf="ingresoCajaForm.get('fecha_reserva')?.invalid && (ingresoCajaForm.get('fecha_reserva')?.dirty || ingresoCajaForm.get('fecha_reserva')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+
+                <div *ngIf="!ingresoCajaForm.get('doctor_id')?.invalid" class="field col-12 md:col-6">
+                    <label for="horarios_disponibles">Horarios disponibles<sup style="color: red;">*</sup></label>
+                    <br>
+                    <p-dropdown appendTo="body" [filter]="true" [showClear]="true"
+                        emptyMessage="Resultados no encontrados" [options]="getListHorariosDisp$ |async"
+                        formControlName="horarios_disponibles" placeholder="Seleccione un horario" autoWidth="false"
+                        [style]="{'width':'100%'}" optionValue="id" optionLabel="descripcion">
+                    </p-dropdown>
+                    <div
+                        *ngIf="ingresoCajaForm.get('horarios_disponibles')?.invalid && (ingresoCajaForm.get('horarios_disponibles')?.dirty || ingresoCajaForm.get('horarios_disponibles')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+
+
+                <div *ngIf="!ingresoCajaForm.get('tipo_consulta')?.invalid" class="field col-12">
+                    <table formArrayName="hpagos">
+                        <!-- <ng-template pTemplate="header"> -->
+                        <tr>
+                            <th>Forma de pago</th>
+                            <th>Valor</th>
+                            <th></th>
+                        </tr>
+
+                        <tr *ngFor="let item of $any(ingresoCajaForm.controls['hpagos'])['controls'];let i = index ">
+                            <td [formGroupName]="i">
+                                <div style="width: 460px;">
+                                    <p-dropdown formControlName="forma_pago" appendTo="body" [filter]="true"
+                                        [showClear]="true" [options]="forma_pago_select$ | async"
+                                        placeholder="Seleccione forma de pago" autoWidth="false"
+                                        [style]="{'width':'100%'}" optionValue="id" optionLabel="descripcion">
+                                    </p-dropdown>
+                                </div>
+
+                            </td>
+                            <td [formGroupName]="i">
+                                <div>
+                                    <p-inputNumber formControlName="valor" mode="currency" currency="USD" locale="en-US"
+                                        placeholder="Ingrese el valor" [inputStyle]="{'text-align':'right'}"
+                                        [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </td>
+                            <td [formGroupName]="i">
+                                <div style="text-align: center;">
+                                    <p-button (onClick)="removeitem(i)" styleClass="p-button-danger" icon="pi pi-trash">
+                                    </p-button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <div style="text-align: center;">
+                                    <p-button (onClick)="addItem()" styleClass="p-button-info" icon="pi pi-plus">
+                                    </p-button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: right;">
+                                <strong>Valor consulta: </strong>
+                            </td>
+                            <td><strong>
+                                    {{ingresoCajaForm.get('tipo_consulta')?.value?.valor |
+                                    currency}} </strong>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+        <ng-template pTemplate="footer">
+            <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cancelar"></p-button>
+
+            <p-button *ngIf="tipo!=='V'" type="submit" styleClass="p-button-success" label="Guardar"
+                class="p-button-text" icon="pi pi-save"></p-button>
+
+        </ng-template>
+
+    </p-dialog>
+</form>
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+<p-toast></p-toast>

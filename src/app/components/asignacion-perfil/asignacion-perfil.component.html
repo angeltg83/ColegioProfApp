@@ -1,0 +1,29 @@
+<div class="grid">
+    <div class="col">
+        <label for="lastname6"> <strong>Roles del sistema</strong> </label>
+        <p-listbox [options]="selectRol$" optionLabel="nombre" optionValue="id"
+            [(ngModel)]="perfilElegido" emptyMessage="Registros no encontrados"></p-listbox>
+    </div>
+    <div class="col">
+        <div class="flex align-items-center justify-content-center m-2 px-5 py-3 border-round">
+            <div class="col-2">
+                <p-button (click)="asignarPerfilUsuario()" icon="pi pi-chevron-right">
+                </p-button>
+            </div>
+
+        </div>
+
+        <div class="flex align-items-center justify-content-center m-2 px-5 py-3 border-round">
+            <div class="col-2">
+                <p-button (click)="eliminarPerfilUsuario()" icon="pi pi-chevron-left">
+                </p-button>
+            </div>
+
+        </div>
+    </div>
+    <div class="col">
+        <label for="lastname6"><strong>Roles asignados</strong> </label>
+        <p-listbox [(ngModel)]="rolAsignadoUsuario" [options]="selectRolUsuario$" optionLabel="nombre" optionValue="id"
+            emptyMessage="Registros no encontrados"></p-listbox>
+    </div>
+</div>

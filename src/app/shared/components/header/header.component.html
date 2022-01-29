@@ -1,0 +1,22 @@
+<mat-toolbar color='primary'>
+    <ng-container *ngIf="!isLogged; else viewLogout">
+        <span>Consultorio médico</span>
+    </ng-container>
+</mat-toolbar>
+<ng-template #viewLogout>
+    <button mat-icon-button (click)="onToggleSidenav()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <span>Consultorio médico</span>
+    <span class="spacer"></span>
+    <a mat-button (click)="onLogout()">Logout</a>
+</ng-template>
+
+
+<ng-template #viewAdmin>
+    <span>Consultorio médico</span>
+    <span class="spacer"></span>
+    <div>
+        <a *ngIf="!isLogged; else viewLogout" mat-button [routerLink]="'/login'">Login</a>
+    </div>
+</ng-template>

@@ -1,0 +1,89 @@
+<p-toast></p-toast>
+<div class="mt-2 mr-2 ml-2">
+    <p-panel header="Módulos del sistema" class="p-mt-5 tab-padding-0" [toggleable]="false">
+        <p-table #dt styleClass="p-datatable-sm p-datatable-gridlines p-datatable-responsive-demo" [value]="data"
+            [lazy]="true" (onLazyLoad)="loadModulos($event)" [totalRecords]="totalRecords" [paginator]="true"
+            [rows]="10" [showCurrentPageReport]="true" [paginator]="true"
+            styleClass="p-datatable-gridlines p-datatable-responsive-demo"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+            [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0"></h5>
+                    <div class="p-flexp-d-flex p-mt-2 p-mb-2"
+                        style="display: flex; justify-content: right; align-items: right">
+                        <!-- (click)="gotoShowModalVerUsuarioSistema()" -->
+                        <p-button (click)="showModalNuevoModulo=true" label="Nuevo" class="p-mr-2 p-mb-2"
+                            styleClass="p-button-info"></p-button>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 4rem">Id</th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Nombre
+                            <p-columnFilter type="text" field="nombre"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Aplicación
+                            <p-columnFilter type="text" field="aplicacion"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Ruta acceso
+                            <p-columnFilter type="text" field="ruta_acceso"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th>
+                        <div class="p-d-flex p-jc-between p-ai-center">
+                            Módulo relacionado
+                            <p-columnFilter type="text" field="moduloPadre"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th style="width: 8rem">Estado</th>
+                    <th style="width: 8rem">Acción</th>
+                    <!-- <th *ngFor="let col of cols">
+                {{col.header}}
+            </th> -->
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr [pSelectableRow]="item">
+                    <td style="width: 4rem">{{ item.id }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.aplicacion }}</td>
+                    <td>{{ item.ruta_acceso }}</td>
+                    <td>{{ item.moduloPadre }}</td>
+                    <td>
+                        <p-tag *ngIf="item.estado_registro" styleClass="p-mr-2" severity="success" value="Activo">
+                        </p-tag>
+                        <p-tag *ngIf="!item.estado_registro" styleClass="p-mr-2" severity="danger" value="Inactivo">
+                        </p-tag>
+                    </td>
+                    <td>
+                        <button *ngFor="let i of item.acciones" pButton pRipple type="button" icon={{i.icon}}
+                            pTooltip={{i.label}} tooltipPosition="top" (click)="handleAction(i.metodo,item)"
+                            class="p-button-rounded p-button-secondary p-button-text"></button>
+                    </td>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6">Resultados no encontrados.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
+</div>
+
+<app-form-modulo *ngIf="showModalNuevoModulo" tipo="N" tituloForm="Nuevo módulo"
+    [showModalModulo]="showModalNuevoModulo" (propagar)="getStaus($event)"></app-form-modulo>
+
+<app-form-modulo *ngIf="showEditarModulo" tipo="E" tituloForm="Editar módulo" [showModalModulo]="showEditarModulo"
+    [id]="this.id" (propagar)="getStaus($event)"></app-form-modulo>

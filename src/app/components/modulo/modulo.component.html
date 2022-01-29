@@ -1,0 +1,106 @@
+<form autocomplete="off" [formGroup]="moduloForm" (ngSubmit)="onSubmit()">
+    <p-dialog *ngIf="!loading" header={{tituloForm}} [(visible)]="showModalModulo" [modal]="true" [baseZIndex]="10000"
+        [style]="{ width: '800px' }" [draggable]="false" [resizable]="false" (onHide)="onHide()">
+
+        <div class="card">
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="nombre">Nombre<sup style="color: red;">*</sup></label>
+                    <input formControlName="nombre" id="nombre" type="text" placeholder="Ingresar el nombre" pInputText
+                        [ngClass]="{'ng-invalid ng-dirty':moduloForm.get('nombre')?.invalid && (moduloForm.get('nombre')?.dirty ||  moduloForm.get('nombre')?.touched) }"
+                        class="inputfield w-full">
+                    <div
+                        *ngIf="moduloForm.get('nombre')?.invalid && (moduloForm.get('nombre')?.dirty || moduloForm.get('nombre')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="descripcion">Descripción<sup style="color: red;">*</sup></label>
+                    <input formControlName="descripcion" id="descripcion" type="text" placeholder="Ingrese descripción"
+                        pInputText class="inputfield w-full">
+                </div>
+
+                <div class="field col-12">
+                    <label for="ruta_acceso">Ruta acceso</label>
+                    <input formControlName="ruta_acceso" id="ruta_acceso" type="text"
+                        placeholder="Ingrese la ruta acceso" pInputText class="inputfield w-full">
+                </div>
+
+
+                <div class="field col-12 md:col-6">
+                    <label for="modulo_id_padre">Módulo padre</label> <br>
+                    <p-dropdown formControlName="id_modulo_padre" appendTo="body" inputId="modulo_id_padre"
+                        [filter]="true" [showClear]="true" placeholder="Seleccione módulo relacionado" autoWidth="false"
+                        [style]="{'width':'100%'}" [options]="moduloSelect$ | async" optionValue="id"
+                        optionLabel="nombre">
+                    </p-dropdown>
+                </div>
+
+                <!-- <div class="field col-12 md:col-6">
+                    <label for="tipo_modulo">Tipo<sup style="color: red;">*</sup></label> <br>
+                    <p-dropdown appendTo="body" inputId="tipo_modulo" placeholder="Seleccione el tipo del modulo"
+                        autoWidth="false" [style]="{'width':'100%'}" [options]="[]" optionValue="id"
+                        [ngClass]="{'ng-invalid ng-dirty':moduloForm.get('tipo_modulo')?.invalid && (moduloForm.get('tipo_modulo')?.dirty ||  moduloForm.get('tipo_modulo')?.touched) }"
+                        optionLabel="nombre" formControlName="tipo_modulo">
+                    </p-dropdown>
+                    <div
+                        *ngIf="moduloForm.get('tipo_modulo')?.invalid && (moduloForm.get('tipo_modulo')?.dirty || moduloForm.get('tipo_modulo')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div> -->
+
+                <div class="field col-12 md:col-6">
+                    <label for="aplicacion">Aplicación<sup style="color: red;">*</sup></label> <br>
+                    <p-dropdown appendTo="body" inputId="modulo" placeholder="Seleccione la aplicación"
+                        autoWidth="false" [style]="{'width':'100%'}" [options]="aplicacionSelect$ |async"
+                        optionValue="id_aplicacion" [filter]="true" [showClear]="true"
+                        emptyMessage="Resultados no encontrados" emptyFilterMessage="Resultados no encontrados"
+                        [ngClass]="{'ng-invalid ng-dirty':moduloForm.get('id_aplicacion')?.invalid && (moduloForm.get('id_aplicacion')?.dirty ||  moduloForm.get('id_aplicacion')?.touched) }"
+                        optionLabel="nombre" formControlName="id_aplicacion">
+                    </p-dropdown>
+                    <div
+                        *ngIf="moduloForm.get('id_aplicacion')?.invalid && (moduloForm.get('id_aplicacion')?.dirty || moduloForm.get('id_aplicacion')?.touched)">
+                        <span style="color: red; font-size: 11px">Campo requerido</span>
+                    </div>
+                </div>
+
+
+                <div class="field col-12 md:col-6">
+                    <label for="icon">Icono</label>
+                    <input formControlName="icono" id="icon" type="text" placeholder="Ingresar el icono" pInputText
+                        class="inputfield w-full">
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="icon">Nivel</label><br>
+                    <p-inputNumber formControlName="nivel" styleClass="wid100" mode="decimal" autoWidth="false"
+                        placeholder="Ingrese el nivel" [style]="{'width':'100%'}" inputId="withoutgrouping"
+                        [useGrouping]="false">
+                    </p-inputNumber>
+
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label for="icon">Orden</label> <br>
+                    <p-inputNumber formControlName="orden" styleClass="wid100" mode="decimal" autoWidth="false"
+                        placeholder="Ingrese el orden" [style]="{'width':'100%'}" inputId="withoutgrouping"
+                        [useGrouping]="false">
+                    </p-inputNumber>
+                </div>
+
+            </div>
+
+        </div>
+
+        <ng-template pTemplate="footer">
+            <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cancelar"></p-button>
+
+            <p-button *ngIf="tipo!=='V'" type="submit" styleClass="p-button-success" label="Guardar"
+                class="p-button-text" icon="pi pi-save"></p-button>
+
+        </ng-template>
+
+    </p-dialog>
+</form>
+<p-toast></p-toast>
