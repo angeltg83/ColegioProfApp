@@ -11,6 +11,7 @@ import { UserResponse } from '@app/shared/models/user.interfaces';
 export class HeaderComponent implements OnInit, OnDestroy {
   isAdmin = true;
   isLogged = false;
+  header_title = "Colegio de Profesionales"
   private subscripcion: Subscription = new Subscription;
   @Output() toggleSidenav = new EventEmitter<void>();
   events = [];
@@ -22,7 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       //console.log('antes de menu...', this.isLogged)
       if (this.isLogged) {
         const user: UserResponse = this.authSrv.getUser()
-        console.log({user})
+        console.log({ user })
         this.authSrv.getOptions({ id: user.id }).subscribe(menu => {
           console.log(menu)
           this.authSrv.menu$.emit(menu);

@@ -23,8 +23,9 @@ import { InputNumberModule } from "primeng/inputnumber";
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FieldsetModule } from 'primeng/fieldset';
+import { ImageModule } from 'primeng/image';
 
-const myModules: Array<any> = [FieldsetModule, ConfirmDialogModule, CalendarModule, InputNumberModule, DropdownModule, DynamicDialogModule, DividerModule, AccordionModule, MenuModule, ButtonModule, ToolbarModule, SidebarModule, ToastModule, PanelMenuModule,
+const myModules: Array<any> = [ImageModule, FieldsetModule, ConfirmDialogModule, CalendarModule, InputNumberModule, DropdownModule, DynamicDialogModule, DividerModule, AccordionModule, MenuModule, ButtonModule, ToolbarModule, SidebarModule, ToastModule, PanelMenuModule,
     TableModule, PanelModule, TagModule, TooltipModule, DialogModule, CheckboxModule, InputTextModule, ListboxModule, PasswordModule];
 @NgModule({
     imports: [...myModules],

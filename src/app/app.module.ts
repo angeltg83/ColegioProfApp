@@ -38,8 +38,10 @@ import { RolesService } from '@services/roles.service';
 import { PermisoComponent } from '@pages/permiso/permiso.component'
 
 //modulo contable Ingresos de caja
-import { IngresosCajaComponent } from './pages/ingresos-caja/ingresos-caja.component';
-import { IngresosDiariosRptComponent } from "./pages/reportes_contables/ingresos-diarios/ingresos-diarios.component"
+import { IngresosCajaComponent } from '@pages/ingresos-caja/ingresos-caja.component';
+import { IngresosDiariosRptComponent } from "@pages/reportes_contables/ingresos-diarios/ingresos-diarios.component";
+
+import { RegistroProfesionalComponent } from "@pages/registro-profesional/registro-profesional.component"
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { IngresosDiariosRptComponent } from "./pages/reportes_contables/ingresos
     PermisoComponent,
     //Contable
     IngresosCajaComponent,
-    IngresosDiariosRptComponent
+    IngresosDiariosRptComponent,
+    RegistroProfesionalComponent
   ],
   imports: [
     FormsModule,
@@ -77,6 +80,8 @@ import { IngresosDiariosRptComponent } from "./pages/reportes_contables/ingresos
      * @desc imports modulo citas medicas
      */
     CitaMedicaModule,
+
+
   ],
 
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }, RolesService],

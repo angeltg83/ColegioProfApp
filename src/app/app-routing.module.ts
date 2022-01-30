@@ -11,6 +11,8 @@ import { PermisoComponent } from "@pages/permiso/permiso.component"
 import { IngresosCajaComponent } from "./pages/ingresos-caja/ingresos-caja.component"
 import { IngresosDiariosRptComponent } from "./pages/reportes_contables/ingresos-diarios/ingresos-diarios.component"
 
+import { RegistroProfesionalComponent } from "@pages/registro-profesional/registro-profesional.component"
+
 const routes: Routes = [
   { path: "", loadChildren: () => import("./pages/home/home.module").then((m) => m.HomeModule) },
   { path: "notFound", loadChildren: () => import("./pages/not-found/not-found.module").then((m) => m.NotFoundModule) },
@@ -36,15 +38,11 @@ const routes: Routes = [
     path: "seguridad/permiso/listado",
     component: PermisoComponent,
   },
-  //Modulo Contable - Ingresos / Egresos.
   {
-    path: "contable/ingresos-caja/listado",
-    component: IngresosCajaComponent,
+    path: "administracion/registro-profesional",
+    component: RegistroProfesionalComponent
   },
-  {
-    path: "contable/reporte/ingresos-diario",
-    component: IngresosDiariosRptComponent,
-  }
+
 ]
 
 @NgModule({

@@ -1,0 +1,86 @@
+<p-toast [baseZIndex]="9999"></p-toast>
+
+<div class="mt-2 mr-2 ml-2">
+  <p-panel header="Registro de profesionales" class="p-mt-5 tab-padding-0" [toggleable]="false">
+    <p-table
+      styleClass="p-datatable-gridlines p-datatable-responsive-demo"
+      [value]="data"
+      [lazy]="true"
+      (onLazyLoad)="loadUsers($event)"
+      [totalRecords]="totalRecords"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [paginator]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
+      [resizableColumns]="true"
+      [autoLayout]="true"
+      [rowsPerPageOptions]="[10, 25, 50]"
+    >
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <h5 class="p-m-0"></h5>
+          <div class="p-flexp-d-flex p-mt-2 p-mb-2" style="display: flex; justify-content: right; align-items: right">
+            <!-- (click)="gotoShowModalVerUsuarioSistema()" -->
+            <p-button
+              (click)="visualizarFormPerfil()"
+              label="Nuevo"
+              class="p-mr-2 p-mb-2"
+              styleClass="p-button-info"
+            ></p-button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 2%">Código senecyt</th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Nombre completo
+              <p-columnFilter type="text" field="nombres"></p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">Identificación</div>
+          </th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">Correo</div>
+          </th>
+          <th style="width: 2%">Estado</th>
+          <th style="width: 2%">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>
+            <div style="width: 2%">
+              {{ item.codigo_senecyt }}
+            </div>
+          </td>
+          <td>{{ item.nombre_completo }}</td>
+          <td>{{ item.identificacion }}</td>
+          <td>{{ item.correo }}</td>
+          <td></td>
+          <td>
+            <button
+              *ngFor="let i of item.acciones"
+              pButton
+              pRipple
+              type="button"
+              icon="{{ i.icon }}"
+              pTooltip="{{ i.label }}"
+              tooltipPosition="top"
+              (click)="handleAction(i.metodo, item)"
+              class="p-button-rounded p-button-secondary p-button-text"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">Resultados no encontrados.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+</div>
