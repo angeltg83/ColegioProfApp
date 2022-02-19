@@ -22,7 +22,8 @@
           <div class="p-flexp-d-flex p-mt-2 p-mb-2" style="display: flex; justify-content: right; align-items: right">
             <!-- (click)="gotoShowModalVerUsuarioSistema()" -->
             <p-button
-              (click)="visualizarFormPerfil()"
+              *ngIf="permisoNuevo | async"
+              (click)="nuevoProfesional()"
               label="Nuevo"
               class="p-mr-2 p-mb-2"
               styleClass="p-button-info"
@@ -84,3 +85,7 @@
     </p-table>
   </p-panel>
 </div>
+
+<app-form-profesion *ngIf="showModalFormProfesional" tipo="N" tituloForm="Nuevo profesional"
+    [showModalNuevoUsuario]="showModalFormProfesional" (propagar)="getStaus($event)"></app-form-profesion>
+

@@ -42,6 +42,7 @@ import { IngresosCajaComponent } from '@pages/ingresos-caja/ingresos-caja.compon
 import { IngresosDiariosRptComponent } from "@pages/reportes_contables/ingresos-diarios/ingresos-diarios.component";
 
 import { RegistroProfesionalComponent } from "@pages/registro-profesional/registro-profesional.component"
+import { FormProfesionalModule } from '@components/formProfesional/form-profesional.module'
 
 @NgModule({
   declarations: [
@@ -80,8 +81,8 @@ import { RegistroProfesionalComponent } from "@pages/registro-profesional/regist
      * @desc imports modulo citas medicas
      */
     CitaMedicaModule,
-
-
+    //Form profesional
+    FormProfesionalModule
   ],
 
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }, RolesService],

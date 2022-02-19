@@ -3,6 +3,7 @@ import { MessageService, ConfirmationService, LazyLoadEvent } from 'primeng/api'
 
 import { AuthService } from '../auth/auth.service';
 import { RegistroProfesionalService } from '@app/services/registro-profesional.service';
+import { GeneralService } from '@app/services/general.service';
 @Component({
   selector: 'app-registro',
   templateUrl: './registro-profesional.component.html',
@@ -12,6 +13,7 @@ import { RegistroProfesionalService } from '@app/services/registro-profesional.s
 export class RegistroProfesionalComponent implements OnInit {
 
   constructor(private registroProfesional: RegistroProfesionalService,
+    private generalService: GeneralService,
     private authService: AuthService) { }
   data: any;
   totalRecords: number = 0
@@ -22,7 +24,11 @@ export class RegistroProfesionalComponent implements OnInit {
   showModalVerPerfil: boolean = false
   form: any;
   first: number = 0
+  permisoNuevo: any
+  id_usuario: number = this.authService.getUser().id
+  showModalFormProfesional: boolean = false
   ngOnInit(): void {
+    this.permisoNuevo = this.generalService.getOpcions({ id_modulo: 10, id_usuario: this.id_usuario, nombre: 'Nuevo profesional' })
   }
 
   loadUsers(event: LazyLoadEvent) {
@@ -43,12 +49,6 @@ export class RegistroProfesionalComponent implements OnInit {
     })
   }
 
-
-
-
-
-
-
   handleAction(metodo: string, item: any) {
     this.form = item
     switch (metodo) {
@@ -61,6 +61,9 @@ export class RegistroProfesionalComponent implements OnInit {
     }
   }
 
+  nuevoProfesional(): void {
+    this.showModalFormProfesional = true
+  }
   visualizarFormPerfil(): void {
     this.showModalNuevoPerfil = true;
   }

@@ -1,0 +1,266 @@
+<form autocomplete="off" [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+  <p-dialog
+    *ngIf="!loading"
+    header="{{ tituloForm }}"
+    [(visible)]="showModalNuevoUsuario"
+    [modal]="true"
+    [baseZIndex]="10000"
+    [style]="{ width: '800px' }"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="onHide()"
+  >
+    <div class="card">
+      <div class="formgrid grid">
+        <div class="field col-12 md:col-6">
+          <label for="tip_identificacion">Tipo de identificación<sup style="color: red">*</sup></label>
+          <br />
+          <p-dropdown
+            appendTo="body"
+            [filter]="true"
+            [showClear]="true"
+            [options]="tipo_identificacion$"
+            formControlName="tipoIdentificacion"
+            placeholder="Seleccione el tipo identificación"
+            autoWidth="false"
+            [style]="{ width: '100%' }"
+            optionValue="id"
+            optionLabel="descripcion"
+          >
+          </p-dropdown>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="ident">Identificación<sup style="color: red">*</sup></label>
+          <div class="p-inputgroup">
+            <input
+              formControlName="identificacion"
+              id="iden"
+              type="text"
+              placeholder="Ingresar la identificación"
+              pInputText
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  usuarioForm.get('identificacion')?.invalid &&
+                  (usuarioForm.get('identificacion')?.dirty || usuarioForm.get('identificacion')?.touched)
+              }"
+              class="inputfield w-full"
+            />
+          </div>
+          <div
+            *ngIf="
+              usuarioForm.get('identificacion')?.invalid &&
+              (usuarioForm.get('identificacion')?.dirty || usuarioForm.get('identificacion')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+
+          <span *ngIf="usuarioForm.get('identificacion')?.errors?.maxlength" style="color: red; font-size: 11px"
+            >Debe ingresar {{ usuarioForm.get("identificacion")?.errors?.maxlength?.requiredLength }} digitos
+          </span>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="nombre">Nombres<sup style="color: red">*</sup></label>
+          <input
+            formControlName="nombres"
+            id="nombre"
+            type="text"
+            placeholder="Ingresar nombres"
+            pInputText
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                usuarioForm.get('nombres')?.invalid &&
+                (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+            }"
+            class="inputfield w-full"
+          />
+          <div
+            *ngIf="
+              usuarioForm.get('nombres')?.invalid &&
+              (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+        </div>
+        <div class="field col-12 md:col-6">
+          <label for="apellidos">Apellidos<sup style="color: red">*</sup></label>
+          <input
+            formControlName="apellidos"
+            id="apellidos"
+            type="text"
+            placeholder="Ingrese apellidos"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                usuarioForm.get('apellidos')?.invalid &&
+                (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
+            }"
+            pInputText
+            class="inputfield w-full"
+          />
+          <div
+            *ngIf="
+              usuarioForm.get('apellidos')?.invalid &&
+              (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="nombre">Teléfono<sup style="color: red">*</sup></label>
+          <input
+            formControlName="nombres"
+            id="nombre"
+            type="text"
+            placeholder="Ingresar nombres"
+            pInputText
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                usuarioForm.get('nombres')?.invalid &&
+                (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+            }"
+            class="inputfield w-full"
+          />
+          <div
+            *ngIf="
+              usuarioForm.get('nombres')?.invalid &&
+              (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="fechaNac">Fecha nacimiento<sup style="color: red">*</sup></label> <br />
+          <p-calendar
+            formControlName="fecha_nacimiento"
+            appendTo="body"
+            inputId="dateformat"
+            placeholder="Ingrese fecha de nacimiento"
+            [style]="{ width: '100%' }"
+            dateFormat="yy/mm/dd"
+          ></p-calendar>
+          <div
+            *ngIf="
+              usuarioForm.get('fecha_nacimiento')?.invalid &&
+              (usuarioForm.get('fecha_nacimiento')?.dirty || usuarioForm.get('fecha_nacimiento')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+        </div>
+
+        <div class="field col-12 md:col-12">
+          <label for="apellidos">Dirección<sup style="color: red">*</sup></label>
+          <input
+            formControlName="apellidos"
+            id="apellidos"
+            type="text"
+            placeholder="Ingrese apellidos"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                usuarioForm.get('apellidos')?.invalid &&
+                (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
+            }"
+            pInputText
+            class="inputfield w-full"
+          />
+          <div
+            *ngIf="
+              usuarioForm.get('apellidos')?.invalid &&
+              (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="tip_identificacion">Título obtenido<sup style="color: red">*</sup></label>
+          <br />
+          <p-dropdown
+            appendTo="body"
+            [filter]="true"
+            [showClear]="true"
+            [options]="lista_titulos$"
+            formControlName="tipoIdentificacion"
+            placeholder="Seleccione el título"
+            autoWidth="false"
+            [style]="{ width: '100%' }"
+            optionValue="id"
+            optionLabel="descripcion"
+          >
+          </p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+          <label for="nombre">Código Senecyt<sup style="color: red">*</sup></label>
+          <input
+            formControlName="nombres"
+            id="nombre"
+            type="text"
+            placeholder="Ingresar nombres"
+            pInputText
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                usuarioForm.get('nombres')?.invalid &&
+                (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+            }"
+            class="inputfield w-full"
+          />
+          <div
+            *ngIf="
+              usuarioForm.get('nombres')?.invalid &&
+              (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+        </div>
+
+        <div class="field col-6">
+          <label for="email">Correo electrónico<sup style="color: red">*</sup></label>
+          <input
+            formControlName="email"
+            id="email"
+            type="email"
+            placeholder="Ingrese correo electrónico"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                usuarioForm.get('email')?.invalid &&
+                (usuarioForm.get('email')?.dirty || usuarioForm.get('email')?.touched)
+            }"
+            pInputText
+            class="inputfield w-full"
+          />
+          <div
+            *ngIf="
+              usuarioForm.get('email')?.invalid &&
+              (usuarioForm.get('email')?.dirty || usuarioForm.get('email')?.touched)
+            "
+          >
+            <span style="color: red; font-size: 11px">Campo requerido</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cancelar"></p-button>
+
+      <p-button
+        *ngIf="tipo !== 'V'"
+        type="submit"
+        styleClass="p-button-success"
+        label="Guardar"
+        class="p-button-text"
+        icon="pi pi-save"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
+</form>
+<p-toast></p-toast>
