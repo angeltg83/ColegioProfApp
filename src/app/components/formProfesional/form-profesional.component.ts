@@ -7,6 +7,7 @@ import { AuthService } from '@app/pages/auth/auth.service';
 import { RegistroProfesionalService } from '@app/services/registro-profesional.service';
 import { endOfMonth } from 'date-fns'
 import { addDays } from 'date-fns'
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-form-profesion',
@@ -32,6 +33,7 @@ export class FormProfesionalComponent implements OnInit {
   lista_titulos$: any = [{ id: 1, descripcion: "Ingenieria en Sistemas Computacionales" }, { id: 2, descripcion: "Ingenieria en Networking" }, { id: 3, descripcion: "Ingenieria en Sistemas administrativos" }]
   fecha_ingreso_inicio_mes = addDays(new Date(endOfMonth(new Date())), 1)
   costo_mensual_primera_cuota = 10
+  usuario_id = this.authService.getUser().id
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -56,19 +58,19 @@ export class FormProfesionalComponent implements OnInit {
       codigoSenecyt: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
 
+      //datos de cuota y pagos
       fecha_ingreso: new FormControl(this.fecha_ingreso_inicio_mes, [Validators.required]),
-
       valorEfectivo: new FormControl(0),
       valorTarjetaCredito: new FormControl(0),
       valorTransferencia: new FormControl(0),
 
-      estado_registro: new FormControl(true)
+      estado_registro: new FormControl(true),
+      usuario_id: new FormControl(this.usuario_id)
     });
 
   }
 
   ngOnInit(): void {
-    console.log(this.fecha_ingreso_inicio_mes)
     this.setFormReactive()
   }
 
@@ -85,24 +87,39 @@ export class FormProfesionalComponent implements OnInit {
       return
     }
 
-    this.profesionalService.insert({ ...this.profesionalForm.value }).subscribe({
-      next: response => {
-        const { msg, severity } = response
-        console.log(msg)
-        this.messageService.add({ severity, summary: 'Exito', detail: msg });
-      },
-      complete: () => {
-        setTimeout(() => {
-          this.onHide()
-        }, 1200)
-      },
-      error: (err) => {
-        console.log('err', err)
-        const { error } = err
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.msg });
-        return
+    this.confirmationService.confirm({
+      message: '¿Estas seguro de registrar el nuevo profesional?',
+      header: 'Confirmación',
+      acceptLabel: 'Guardar',
+      rejectLabel: 'Cerrar',
+      accept: () => {
+        this.profesionalService.insert({ ...this.profesionalForm.value }).subscribe({
+          next: response => {
+            
+            const byteArray = new Uint8Array(atob(response).split('').map(char => char.charCodeAt(0)));
+            const blob = new Blob([byteArray], { type: 'application/pdf' })
+            saveAs(blob, 'comprobante-pago.pdf');
+
+            // const { msg, severity } = response
+            // console.log(msg)
+            // this.messageService.add({ severity, summary: 'Exito', detail: msg });
+          },
+          complete: () => {
+            setTimeout(() => {
+              this.onHide()
+            }, 1200)
+          },
+          error: (err) => {
+            console.log('err', err)
+            const { error } = err
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.msg });
+            return
+          }
+        })
       }
-    })
+    });
+
+
   }
 
   updateProfesional(): void {

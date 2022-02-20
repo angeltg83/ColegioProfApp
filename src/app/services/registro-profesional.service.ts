@@ -18,14 +18,14 @@ export class RegistroProfesionalService {
 
     insert(params: any): Observable<any> {
         const url = `${environment.API_URL}/administracion/registro/profesional/insert`;
-        return this.http.post(url, params)
+        return this.http.post(url, params, { responseType: 'text' })
     }
 
 
 
 
 
-    
+
     update(params: any): Observable<any> {
         const url = `${environment.API_URL}/perfil/update`;
         return this.http.post(url, params)

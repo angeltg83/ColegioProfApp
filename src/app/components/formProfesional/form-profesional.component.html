@@ -74,9 +74,7 @@
             placeholder="Ingresar nombres"
             pInputText
             [ngClass]="{
-              'ng-invalid ng-dirty':
-                profesionalForm.get('nombres')?.invalid &&
-                (profesionalForm.get('nombres')?.dirty || profesionalForm.get('nombres')?.touched)
+              'ng-invalid ng-dirty': nombres?.invalid && (nombres?.dirty || nombres?.touched)
             }"
             class="inputfield w-full"
           />
@@ -95,9 +93,7 @@
             type="text"
             placeholder="Ingrese apellidos"
             [ngClass]="{
-              'ng-invalid ng-dirty':
-                profesionalForm.get('apellidos')?.invalid &&
-                (profesionalForm.get('apellidos')?.dirty || profesionalForm.get('apellidos')?.touched)
+              'ng-invalid ng-dirty': apellidos?.invalid && (apellidos?.dirty || apellidos?.touched)
             }"
             pInputText
             class="inputfield w-full"
@@ -118,9 +114,7 @@
             placeholder="Ingresar teléfono"
             pInputText
             [ngClass]="{
-              'ng-invalid ng-dirty':
-                profesionalForm.get('telefono')?.invalid &&
-                (profesionalForm.get('telefono')?.dirty || profesionalForm.get('telefono')?.touched)
+              'ng-invalid ng-dirty': telefono?.invalid && (telefono?.dirty || telefono?.touched)
             }"
             class="inputfield w-full"
           />
@@ -151,9 +145,7 @@
             type="text"
             placeholder="Ingrese dirección"
             [ngClass]="{
-              'ng-invalid ng-dirty':
-                profesionalForm.get('direccion')?.invalid &&
-                (profesionalForm.get('direccion')?.dirty || profesionalForm.get('direccion')?.touched)
+              'ng-invalid ng-dirty': direccion?.invalid && (direccion?.dirty || direccion?.touched)
             }"
             pInputText
             class="inputfield w-full"
@@ -179,6 +171,9 @@
             [style]="{ width: '100%' }"
             optionValue="id"
             optionLabel="descripcion"
+            [ngClass]="{
+              'ng-invalid ng-dirty': tituloObtenido?.invalid && (tituloObtenido?.dirty || tituloObtenido?.touched)
+            }"
           >
           </p-dropdown>
           <div *ngIf="tituloObtenido?.invalid && (tituloObtenido?.dirty || tituloObtenido?.touched)">
@@ -196,9 +191,7 @@
             placeholder="Ingresar el codigo senecyt"
             pInputText
             [ngClass]="{
-              'ng-invalid ng-dirty':
-                profesionalForm.get('codigoSenecyt')?.invalid &&
-                (profesionalForm.get('codigoSenecyt')?.dirty || profesionalForm.get('codigoSenecyt')?.touched)
+              'ng-invalid ng-dirty': codigoSenecyt?.invalid && (codigoSenecyt?.dirty || codigoSenecyt?.touched)
             }"
             class="inputfield w-full"
           />
@@ -218,8 +211,8 @@
             placeholder="Ingrese correo electrónico"
             [ngClass]="{
               'ng-invalid ng-dirty':
-                profesionalForm.get('email')?.invalid &&
-                (profesionalForm.get('email')?.dirty || profesionalForm.get('email')?.touched)
+                email?.invalid &&
+                (email?.dirty || email?.touched)
             }"
             pInputText
             class="inputfield w-full"
@@ -270,9 +263,6 @@
             locale="en-US"
             placeholder="Ingrese valor efectivo"
             class="inputfield w-full"
-            [ngClass]="{
-              'ng-invalid ng-dirty': valorEfectivo?.invalid && (valorEfectivo?.dirty || valorEfectivo?.touched)
-            }"
           ></p-inputNumber>
         </div>
 
@@ -286,10 +276,6 @@
             locale="en-US"
             placeholder="Ingrese valor tarjeta crédito"
             class="inputfield w-full"
-            [ngClass]="{
-              'ng-invalid ng-dirty':
-                valorTarjetaCredito?.invalid && (valorTarjetaCredito?.dirty || valorTarjetaCredito?.touched)
-            }"
           ></p-inputNumber>
         </div>
 
@@ -303,10 +289,6 @@
             locale="en-US"
             placeholder="Ingrese valor transferencia"
             class="inputfield w-full"
-            [ngClass]="{
-              'ng-invalid ng-dirty':
-                valorTransferencia?.invalid && (valorTransferencia?.dirty || valorTransferencia?.touched)
-            }"
           ></p-inputNumber>
         </div>
       </div>
@@ -326,4 +308,6 @@
     </ng-template>
   </p-dialog>
 </form>
+<p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
 <p-toast></p-toast>
