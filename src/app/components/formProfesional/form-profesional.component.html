@@ -1,8 +1,8 @@
-<form autocomplete="off" [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+<form autocomplete="off" [formGroup]="profesionalForm" (ngSubmit)="onSubmit()">
   <p-dialog
     *ngIf="!loading"
     header="{{ tituloForm }}"
-    [(visible)]="showModalNuevoUsuario"
+    [(visible)]="showModalFormProfesional"
     [modal]="true"
     [baseZIndex]="10000"
     [style]="{ width: '800px' }"
@@ -26,8 +26,15 @@
             [style]="{ width: '100%' }"
             optionValue="id"
             optionLabel="descripcion"
+            (onChange)="cambioTipoIdentificacion($event)"
           >
           </p-dropdown>
+
+          <div *ngIf="tipoIdentificacion?.invalid && (tipoIdentificacion?.dirty || tipoIdentificacion?.touched)">
+            <div *ngIf="tipoIdentificacion?.errors?.required">
+              <span class="text-danger">Debe seleccionar el tipo de identificación</span>
+            </div>
+          </div>
         </div>
 
         <div class="field col-12 md:col-6">
@@ -40,25 +47,22 @@
               placeholder="Ingresar la identificación"
               pInputText
               [ngClass]="{
-                'ng-invalid ng-dirty':
-                  usuarioForm.get('identificacion')?.invalid &&
-                  (usuarioForm.get('identificacion')?.dirty || usuarioForm.get('identificacion')?.touched)
+                'ng-invalid ng-dirty': identificacion?.invalid && (identificacion?.dirty || identificacion?.touched)
               }"
               class="inputfield w-full"
             />
           </div>
-          <div
-            *ngIf="
-              usuarioForm.get('identificacion')?.invalid &&
-              (usuarioForm.get('identificacion')?.dirty || usuarioForm.get('identificacion')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
-          </div>
+          <div *ngIf="identificacion?.invalid && (identificacion?.dirty || identificacion?.touched)">
+            <div *ngIf="identificacion?.errors?.required">
+              <span class="text-danger">Identificación es requerida</span>
+            </div>
 
-          <span *ngIf="usuarioForm.get('identificacion')?.errors?.maxlength" style="color: red; font-size: 11px"
-            >Debe ingresar {{ usuarioForm.get("identificacion")?.errors?.maxlength?.requiredLength }} digitos
-          </span>
+            <div *ngIf="identificacion?.errors?.maxlength">
+              <span class="text-danger">
+                Debe ingresar {{ identificacion?.errors?.maxlength?.requiredLength }} digitos
+              </span>
+            </div>
+          </div>
         </div>
 
         <div class="field col-12 md:col-6">
@@ -71,20 +75,18 @@
             pInputText
             [ngClass]="{
               'ng-invalid ng-dirty':
-                usuarioForm.get('nombres')?.invalid &&
-                (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+                profesionalForm.get('nombres')?.invalid &&
+                (profesionalForm.get('nombres')?.dirty || profesionalForm.get('nombres')?.touched)
             }"
             class="inputfield w-full"
           />
-          <div
-            *ngIf="
-              usuarioForm.get('nombres')?.invalid &&
-              (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
+          <div *ngIf="nombres?.invalid && (nombres?.dirty || nombres?.touched)">
+            <div *ngIf="nombres?.errors?.required">
+              <span class="text-danger">Nombres son requeridos</span>
+            </div>
           </div>
         </div>
+
         <div class="field col-12 md:col-6">
           <label for="apellidos">Apellidos<sup style="color: red">*</sup></label>
           <input
@@ -94,49 +96,43 @@
             placeholder="Ingrese apellidos"
             [ngClass]="{
               'ng-invalid ng-dirty':
-                usuarioForm.get('apellidos')?.invalid &&
-                (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
+                profesionalForm.get('apellidos')?.invalid &&
+                (profesionalForm.get('apellidos')?.dirty || profesionalForm.get('apellidos')?.touched)
             }"
             pInputText
             class="inputfield w-full"
           />
-          <div
-            *ngIf="
-              usuarioForm.get('apellidos')?.invalid &&
-              (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
+          <div *ngIf="apellidos?.invalid && (apellidos?.dirty || apellidos?.touched)">
+            <div *ngIf="apellidos?.errors?.required">
+              <span class="text-danger">Apellidos son requeridos</span>
+            </div>
           </div>
         </div>
 
         <div class="field col-12 md:col-6">
-          <label for="nombre">Teléfono<sup style="color: red">*</sup></label>
+          <label for="nombre">Teléfono</label>
           <input
-            formControlName="nombres"
-            id="nombre"
+            formControlName="telefono"
+            id="telefono"
             type="text"
-            placeholder="Ingresar nombres"
+            placeholder="Ingresar teléfono"
             pInputText
             [ngClass]="{
               'ng-invalid ng-dirty':
-                usuarioForm.get('nombres')?.invalid &&
-                (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+                profesionalForm.get('telefono')?.invalid &&
+                (profesionalForm.get('telefono')?.dirty || profesionalForm.get('telefono')?.touched)
             }"
             class="inputfield w-full"
           />
-          <div
-            *ngIf="
-              usuarioForm.get('nombres')?.invalid &&
-              (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
+          <div *ngIf="telefono?.invalid && (telefono?.dirty || telefono?.touched)">
+            <div *ngIf="telefono?.errors?.maxlength">
+              <span class="text-danger"> Debe ingresar {{ telefono?.errors?.maxlength?.requiredLength }} digitos </span>
+            </div>
           </div>
         </div>
 
         <div class="field col-12 md:col-6">
-          <label for="fechaNac">Fecha nacimiento<sup style="color: red">*</sup></label> <br />
+          <label for="fechaNac">Fecha nacimiento</label> <br />
           <p-calendar
             formControlName="fecha_nacimiento"
             appendTo="body"
@@ -145,50 +141,39 @@
             [style]="{ width: '100%' }"
             dateFormat="yy/mm/dd"
           ></p-calendar>
-          <div
-            *ngIf="
-              usuarioForm.get('fecha_nacimiento')?.invalid &&
-              (usuarioForm.get('fecha_nacimiento')?.dirty || usuarioForm.get('fecha_nacimiento')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
-          </div>
         </div>
 
         <div class="field col-12 md:col-12">
-          <label for="apellidos">Dirección<sup style="color: red">*</sup></label>
+          <label for="direccion">Dirección<sup style="color: red">*</sup></label>
           <input
-            formControlName="apellidos"
-            id="apellidos"
+            formControlName="direccion"
+            id="direccion"
             type="text"
-            placeholder="Ingrese apellidos"
+            placeholder="Ingrese dirección"
             [ngClass]="{
               'ng-invalid ng-dirty':
-                usuarioForm.get('apellidos')?.invalid &&
-                (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
+                profesionalForm.get('direccion')?.invalid &&
+                (profesionalForm.get('direccion')?.dirty || profesionalForm.get('direccion')?.touched)
             }"
             pInputText
             class="inputfield w-full"
           />
-          <div
-            *ngIf="
-              usuarioForm.get('apellidos')?.invalid &&
-              (usuarioForm.get('apellidos')?.dirty || usuarioForm.get('apellidos')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
+          <div *ngIf="direccion?.invalid && (direccion?.dirty || direccion?.touched)">
+            <div *ngIf="direccion?.errors?.required">
+              <span class="text-danger">Dirección es requerida</span>
+            </div>
           </div>
         </div>
 
         <div class="field col-12 md:col-6">
-          <label for="tip_identificacion">Título obtenido<sup style="color: red">*</sup></label>
+          <label for="titulo">Título obtenido<sup style="color: red">*</sup></label>
           <br />
           <p-dropdown
             appendTo="body"
             [filter]="true"
             [showClear]="true"
             [options]="lista_titulos$"
-            formControlName="tipoIdentificacion"
+            formControlName="tituloObtenido"
             placeholder="Seleccione el título"
             autoWidth="false"
             [style]="{ width: '100%' }"
@@ -196,29 +181,31 @@
             optionLabel="descripcion"
           >
           </p-dropdown>
+          <div *ngIf="tituloObtenido?.invalid && (tituloObtenido?.dirty || tituloObtenido?.touched)">
+            <div *ngIf="tituloObtenido?.errors?.required">
+              <span class="text-danger">Debe elegir el título</span>
+            </div>
+          </div>
         </div>
         <div class="field col-12 md:col-6">
-          <label for="nombre">Código Senecyt<sup style="color: red">*</sup></label>
+          <label for="nombre">Código senecyt<sup style="color: red">*</sup></label>
           <input
-            formControlName="nombres"
+            formControlName="codigoSenecyt"
             id="nombre"
             type="text"
-            placeholder="Ingresar nombres"
+            placeholder="Ingresar el codigo senecyt"
             pInputText
             [ngClass]="{
               'ng-invalid ng-dirty':
-                usuarioForm.get('nombres')?.invalid &&
-                (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
+                profesionalForm.get('codigoSenecyt')?.invalid &&
+                (profesionalForm.get('codigoSenecyt')?.dirty || profesionalForm.get('codigoSenecyt')?.touched)
             }"
             class="inputfield w-full"
           />
-          <div
-            *ngIf="
-              usuarioForm.get('nombres')?.invalid &&
-              (usuarioForm.get('nombres')?.dirty || usuarioForm.get('nombres')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
+          <div *ngIf="codigoSenecyt?.invalid && (codigoSenecyt?.dirty || codigoSenecyt?.touched)">
+            <div *ngIf="codigoSenecyt?.errors?.required">
+              <span class="text-danger">Código senecyt es requerido</span>
+            </div>
           </div>
         </div>
 
@@ -231,27 +218,102 @@
             placeholder="Ingrese correo electrónico"
             [ngClass]="{
               'ng-invalid ng-dirty':
-                usuarioForm.get('email')?.invalid &&
-                (usuarioForm.get('email')?.dirty || usuarioForm.get('email')?.touched)
+                profesionalForm.get('email')?.invalid &&
+                (profesionalForm.get('email')?.dirty || profesionalForm.get('email')?.touched)
             }"
             pInputText
             class="inputfield w-full"
           />
-          <div
-            *ngIf="
-              usuarioForm.get('email')?.invalid &&
-              (usuarioForm.get('email')?.dirty || usuarioForm.get('email')?.touched)
-            "
-          >
-            <span style="color: red; font-size: 11px">Campo requerido</span>
+
+          <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+            <div *ngIf="email?.errors?.required">
+              <span class="text-danger">Correo es requerido</span>
+            </div>
+
+            <div *ngIf="email?.errors?.email">
+              <span class="text-danger">Correo eléctronico es inválido </span>
+            </div>
           </div>
+        </div>
+        <div class="field col-12 md:col-6"></div>
+        <div class="field col-12 md:col-12" style="margin-bottom: 0px">
+          <label for=""> <strong>Datos primera cuota</strong> </label>
+        </div>
+
+        <!-- DATOS DE PAGO DE LA PRIMERA CUOTA -->
+        <div class="field col-12 md:col-6">
+          <label for="fechaNac">Fecha de ingreso</label> <br />
+          <p-calendar
+            [minDate]="fecha_ingreso_inicio_mes"
+            formControlName="fecha_ingreso"
+            appendTo="body"
+            inputId="dateformat"
+            placeholder="Ingrese fecha de ingreso"
+            [style]="{ width: '100%' }"
+            dateFormat="yy/mm/dd"
+          ></p-calendar>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="costocuota">Valor primera cuota</label>
+          <p class="input-valor-primera-cuota">{{ costo_mensual_primera_cuota | currency }}</p>
+        </div>
+
+        <!-- DATOS PAGOS -->
+        <div class="field col-12 md:col-4">
+          <label for="efectivo">Efectivo</label>
+
+          <p-inputNumber
+            formControlName="valorEfectivo"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            placeholder="Ingrese valor efectivo"
+            class="inputfield w-full"
+            [ngClass]="{
+              'ng-invalid ng-dirty': valorEfectivo?.invalid && (valorEfectivo?.dirty || valorEfectivo?.touched)
+            }"
+          ></p-inputNumber>
+        </div>
+
+        <div class="field col-12 md:col-4">
+          <label for="efectivo">Tarjeta crédito</label>
+
+          <p-inputNumber
+            formControlName="valorTarjetaCredito"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            placeholder="Ingrese valor tarjeta crédito"
+            class="inputfield w-full"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                valorTarjetaCredito?.invalid && (valorTarjetaCredito?.dirty || valorTarjetaCredito?.touched)
+            }"
+          ></p-inputNumber>
+        </div>
+
+        <div class="field col-12 md:col-4">
+          <label for="efectivo">Transferencia</label>
+
+          <p-inputNumber
+            formControlName="valorTransferencia"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            placeholder="Ingrese valor transferencia"
+            class="inputfield w-full"
+            [ngClass]="{
+              'ng-invalid ng-dirty':
+                valorTransferencia?.invalid && (valorTransferencia?.dirty || valorTransferencia?.touched)
+            }"
+          ></p-inputNumber>
         </div>
       </div>
     </div>
 
     <ng-template pTemplate="footer">
       <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cancelar"></p-button>
-
       <p-button
         *ngIf="tipo !== 'V'"
         type="submit"
@@ -259,6 +321,7 @@
         label="Guardar"
         class="p-button-text"
         icon="pi pi-save"
+        [disabled]="profesionalForm.invalid"
       ></p-button>
     </ng-template>
   </p-dialog>

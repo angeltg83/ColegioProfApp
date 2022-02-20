@@ -2,10 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter, } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { MessageService, ConfirmationService, SelectItem } from 'primeng/api';
 
-import { RolesService } from '@app/services/roles.service';
 import { UsuariosService } from '@app/services/usuarios.service'
 import { AuthService } from '@app/pages/auth/auth.service';
-import { MustMatch } from '@app/helpers/match-must.validator'
+import { RegistroProfesionalService } from '@app/services/registro-profesional.service';
+import { endOfMonth } from 'date-fns'
+import { addDays } from 'date-fns'
 
 @Component({
   selector: 'app-form-profesion',
@@ -14,14 +15,14 @@ import { MustMatch } from '@app/helpers/match-must.validator'
   styleUrls: ['./form-profesional.component.css'],
 })
 export class FormProfesionalComponent implements OnInit {
-  @Input() showModalNuevoUsuario: boolean = false;
+  @Input() showModalFormProfesional: boolean = false;
   @Input() tituloForm: string = '';
   @Input() form: any;
   @Input() tipo: string = "N";
   @Output() propagar = new EventEmitter<boolean>();
   @Output() refres = new EventEmitter<Boolean>();
   loading = false;
-  usuarioForm: FormGroup = new FormGroup({})
+  profesionalForm: FormGroup = new FormGroup({})
   selectedCity = []
   selectRol$!: any
   selectRolUsuario$!: any
@@ -29,60 +30,62 @@ export class FormProfesionalComponent implements OnInit {
   perfilAsignadoUsuario: number = 0
   tipo_identificacion$: any = [{ id: 1, descripcion: "Cédula" }, { id: 2, descripcion: "R.U.C." }]
   lista_titulos$: any = [{ id: 1, descripcion: "Ingenieria en Sistemas Computacionales" }, { id: 2, descripcion: "Ingenieria en Networking" }, { id: 3, descripcion: "Ingenieria en Sistemas administrativos" }]
+  fecha_ingreso_inicio_mes = addDays(new Date(endOfMonth(new Date())), 1)
+  costo_mensual_primera_cuota = 10
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     private authService: AuthService,
-    private usuarioService: UsuariosService
+    private usuarioService: UsuariosService,
+
+    private profesionalService: RegistroProfesionalService
   ) {
   }
 
   setFormReactive(form: any = {}) {
-    let arrayCampoPass = [Validators.required, Validators.minLength(6)]
-    let arrayCampoRepPass = [Validators.required]
-    let jsonVal = {
-      validator: MustMatch('password', 'repeatPassword')
-    }
+    this.profesionalForm = new FormGroup({
+      tipoIdentificacion: new FormControl('', [Validators.required]),
+      identificacion: new FormControl('', [Validators.required]),
+      nombres: new FormControl('', [Validators.required]),
+      apellidos: new FormControl('', [Validators.required]),
+      telefono: new FormControl('', [Validators.maxLength(10)]),
+      fecha_nacimiento: new FormControl(null),
+      direccion: new FormControl('', [Validators.required]),
+      tituloObtenido: new FormControl('', [Validators.required]),
+      codigoSenecyt: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
 
-    if (this.tipo !== 'N') {
-      arrayCampoPass = []
-      arrayCampoRepPass = []
-    }
+      fecha_ingreso: new FormControl(this.fecha_ingreso_inicio_mes, [Validators.required]),
 
-    console.log(form.estado_registro)
-    this.usuarioForm = this.fb.group({
-      id: new FormControl(form?.id || null),
-      nombres: [form?.nombres, Validators.required],
-      username: [form?.username, Validators.required],
-      apellidos: [form?.apellidos, Validators.required],
-      email: [form?.email || '', Validators.required],
-      password: [form?.password || '', arrayCampoPass],
-      repeatPassword: ['', arrayCampoRepPass],
-      estado_registro: [form?.estado_registro],
-    },
-      (this.tipo === 'N') ? jsonVal?.validator : {}
-    );
+      valorEfectivo: new FormControl(0),
+      valorTarjetaCredito: new FormControl(0),
+      valorTransferencia: new FormControl(0),
 
+      estado_registro: new FormControl(true)
+    });
 
   }
 
   ngOnInit(): void {
+    console.log(this.fecha_ingreso_inicio_mes)
     this.setFormReactive()
-    const { id } = this.authService.getUser()
-    if (typeof this.form !== 'undefined') {
-      this.setFormReactive(this.form)
-    }
-
   }
 
-  insertUser(): void {
-    if (this.usuarioForm.invalid) {
+  insertProfesional(): void {
+    if (this.profesionalForm.invalid) {
       this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Hay campos obligatorios requeridos' });
       return
     }
-    console.log(this.usuarioForm.value)
-    this.usuarioService.insertUser({ ...this.usuarioForm.value }).subscribe({
+    console.log(this.profesionalForm.value)
+
+    const costoCuotaIngresado = this.valorEfectivo?.value + this.valorTarjetaCredito?.value + this.valorTransferencia?.value
+    if (costoCuotaIngresado !== this.costo_mensual_primera_cuota) {
+      this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Debe ingresar el valor de una forma de pago' });
+      return
+    }
+
+    this.profesionalService.insert({ ...this.profesionalForm.value }).subscribe({
       next: response => {
         const { msg, severity } = response
         console.log(msg)
@@ -102,11 +105,11 @@ export class FormProfesionalComponent implements OnInit {
     })
   }
 
-  updateUser(): void {
-    if (this.usuarioForm.invalid) {
+  updateProfesional(): void {
+    if (this.profesionalForm.invalid) {
       this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Hay campos obligatorios requeridos' });
     }
-    this.usuarioService.updateUser({ ...this.usuarioForm.value }).subscribe({
+    this.profesionalService.update({ ...this.profesionalForm.value }).subscribe({
       next: ({ msg }) => {
         this.messageService.add({ severity: 'success', summary: 'Exito', detail: msg });
       },
@@ -123,17 +126,17 @@ export class FormProfesionalComponent implements OnInit {
     })
   }
   onSubmit(): void {
-    console.log(this.usuarioForm.valid)
+    console.log(this.profesionalForm.valid)
     if (this.tipo === 'N') {
-      this.insertUser()
+      this.insertProfesional()
     } else {
-      this.updateUser()
+      this.updateProfesional()
 
     }
 
   }
   onPropagar(): void {
-    this.showModalNuevoUsuario = false;
+    this.showModalFormProfesional = false;
     this.propagar.emit(false);
   }
 
@@ -144,4 +147,39 @@ export class FormProfesionalComponent implements OnInit {
   onHide(): void {
     this.onPropagar();
   }
+
+  cambioTipoIdentificacion(event: any) {
+    //console.log(event)
+    const { value } = event
+    if (value === 1) {
+      this.identificacion?.setValidators(Validators.maxLength(10))
+    } else {
+      this.identificacion?.setValidators(Validators.maxLength(13))
+    }
+  }
+
+  get nombres() { return this.profesionalForm.get('nombres'); }
+  get apellidos() { return this.profesionalForm.get('apellidos'); }
+  get tipoIdentificacion() { return this.profesionalForm.get('tipoIdentificacion'); }
+  get identificacion() { return this.profesionalForm.get('identificacion'); }
+
+  get telefono() { return this.profesionalForm.get('telefono'); }
+  get fecha_nacimiento() { return this.profesionalForm.get('fecha_nacimiento'); }
+  get direccion() { return this.profesionalForm.get('direccion'); }
+  get tituloObtenido() { return this.profesionalForm.get('tituloObtenido'); }
+
+  get codigoSenecyt() { return this.profesionalForm.get('codigoSenecyt'); }
+  get email() { return this.profesionalForm.get('email'); }
+
+  get valorEfectivo() {
+    return this.profesionalForm.get('valorEfectivo');
+  }
+  get valorTarjetaCredito() {
+    return this.profesionalForm.get('valorTarjetaCredito');
+  }
+  get valorTransferencia() {
+    return this.profesionalForm.get('valorTransferencia');
+  }
+
+
 }
