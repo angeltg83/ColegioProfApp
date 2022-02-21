@@ -1,0 +1,54 @@
+<form autocomplete="off" [formGroup]="profesionalForm" (ngSubmit)="onSubmit()">
+  <p-dialog
+    *ngIf="!loading"
+    header="{{ tituloForm }}"
+    [(visible)]="showModalEstadoCuenta"
+    [modal]="true"
+    [baseZIndex]="10000"
+    [style]="{ width: '780px' }"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="onHide()"
+  >
+    <div class="card">
+      <div class="formgrid grid">
+        <div class="field col-12 md:col-6">
+          <label for="nombre">Nombres<sup style="color: red">*</sup></label>
+          <input formControlName="nombres" id="nombre" type="text" pInputText readonly class="inputfield w-full" />
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="apellidos">Apellidos<sup style="color: red">*</sup></label>
+          <input formControlName="apellidos" id="apellidos" type="text" pInputText class="inputfield w-full" readonly />
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="telefono">Teléfono</label>
+          <input formControlName="telefono" id="telefono" type="text" pInputText class="inputfield w-full" />
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="titulo">Título obtenido<sup style="color: red">*</sup></label>
+          <br />
+          <input readonly formControlName="titulo" id="titulo" type="text" pInputText class="inputfield w-full" />
+        </div>
+        <div class="field col-12 md:col-6">
+          <label for="nombre">Código senecyt<sup style="color: red">*</sup></label>
+          <input readonly formControlName="codigo_senecyt" id="codi_sene" type="text" pInputText class="inputfield w-full" />
+        </div>
+
+        <div class="field col-6">
+          <label for="email">Correo electrónico<sup style="color: red">*</sup></label>
+          <input readonly formControlName="email" id="email" type="email" pInputText class="inputfield w-full" />
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cerrar"></p-button>
+    </ng-template>
+  </p-dialog>
+</form>
+<p-confirmDialog [style]="{ width: '50vw' }" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>
+<p-toast></p-toast>

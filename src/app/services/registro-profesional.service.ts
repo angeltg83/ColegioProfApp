@@ -21,6 +21,11 @@ export class RegistroProfesionalService {
         return this.http.post(url, params, { responseType: 'text' })
     }
 
+    getEstadoCuenta(params: any): Observable<any> {
+        const url = `${environment.API_URL}/administracion/registro/profesional/estado-cuenta/select`;
+        return this.http.post(url, params)
+    }
+
 
 
 

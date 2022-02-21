@@ -61,7 +61,9 @@
           <td>{{ item.nombre_completo }}</td>
           <td>{{ item.identificacion }}</td>
           <td>{{ item.correo }}</td>
-          <td></td>
+          <td>
+            <p-tag styleClass="mr-2" [severity]="item.severity" [value]="item.estado_pago"></p-tag>
+          </td>
           <td>
             <button
               *ngFor="let i of item.acciones"
@@ -86,6 +88,19 @@
   </p-panel>
 </div>
 
-<app-form-profesion *ngIf="showModalFormProfesional" tipo="N" tituloForm="Nuevo profesional"
-    [showModalFormProfesional]="showModalFormProfesional" (propagar)="getStaus($event)"></app-form-profesion>
+<app-form-profesion
+  *ngIf="showModalFormProfesional"
+  tipo="N"
+  tituloForm="Nuevo profesional"
+  [showModalFormProfesional]="showModalFormProfesional"
+  (propagar)="getStaus($event)"
+></app-form-profesion>
 
+<app-form-estado_cuenta
+  [id]="id_seleccionado"
+  *ngIf="showModalEstadoCuenta"
+  tipo="N"
+  tituloForm="Estado cuenta"
+  [showModalEstadoCuenta]="showModalEstadoCuenta"
+  (propagar)="getStaus($event)"
+></app-form-estado_cuenta>

@@ -19,21 +19,21 @@ export class RegistroProfesionalComponent implements OnInit {
   totalRecords: number = 0
   loading = false;
   rows: number = 10
-  showModalNuevoPerfil: boolean = false
-  showModalEditarPerfil: boolean = false
-  showModalVerPerfil: boolean = false
+  showModalEstadoCuenta: boolean = false
   form: any;
   first: number = 0
   permisoNuevo: any
   id_usuario: number = this.authService.getUser().id
   showModalFormProfesional: boolean = false
+  modulo_id = 10
+  id_seleccionado!: number
   ngOnInit(): void {
-    this.permisoNuevo = this.generalService.getOpcions({ id_modulo: 10, id_usuario: this.id_usuario, nombre: 'Nuevo profesional' })
+    this.permisoNuevo = this.generalService.getOpcions({ id_modulo: this.modulo_id, id_usuario: this.id_usuario, nombre: 'Nuevo profesional' })
   }
 
   loadUsers(event: LazyLoadEvent) {
     this.loading = true
-    this.loadGrid(event?.filters, event.rows, event.first, 10, this.authService.getUser().id)
+    this.loadGrid(event?.filters, event.rows, event.first, this.modulo_id, this.authService.getUser().id)
   }
 
   loadGrid(condiciones: any, rows: number = 10, first: number = 0, id_modulo: number, id_usuario: number) {
@@ -50,13 +50,11 @@ export class RegistroProfesionalComponent implements OnInit {
   }
 
   handleAction(metodo: string, item: any) {
-    this.form = item
+    // this.form = item
+    this.id_seleccionado = item.id
     switch (metodo) {
-      case 'editarPerfil':
-        this.showModalEditarPerfil = true
-        break;
-      case 'verPerfil':
-        this.showModalVerPerfil = true
+      case 'verEstadoCuenta':
+        this.showModalEstadoCuenta = true
         break;
     }
   }
@@ -64,18 +62,16 @@ export class RegistroProfesionalComponent implements OnInit {
   nuevoProfesional(): void {
     this.showModalFormProfesional = true
   }
-  visualizarFormPerfil(): void {
-    this.showModalNuevoPerfil = true;
-  }
 
   getStaus(visibleModal: boolean): void {
-    this.showModalNuevoPerfil = visibleModal;
-    this.showModalEditarPerfil = visibleModal;
-    this.showModalVerPerfil = visibleModal;
+    this.showModalFormProfesional = visibleModal
+    this.showModalEstadoCuenta = visibleModal;
+    // this.showModalNuevoPerfil = visibleModal;
+    // this.showModalVerPerfil = visibleModal;
   }
 
   refreshGrid() {
-    this.loadGrid({}, this.rows, this.first, 2, this.authService.getUser().id)
+    this.loadGrid({}, this.rows, this.first, this.modulo_id, this.authService.getUser().id)
   }
 
 }

@@ -1,32 +1,37 @@
 import { Component, OnInit, Input, Output, EventEmitter, } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { MessageService, ConfirmationService, SelectItem } from 'primeng/api';
 
+import { UsuariosService } from '@app/services/usuarios.service'
 import { AuthService } from '@app/pages/auth/auth.service';
 import { RegistroProfesionalService } from '@app/services/registro-profesional.service';
-import { endOfMonth, addDays } from 'date-fns'
+import { endOfMonth } from 'date-fns'
+import { addDays } from 'date-fns'
 import { saveAs } from 'file-saver';
 
 @Component({
-  selector: 'app-form-profesion',
-  templateUrl: './form-profesional.component.html',
+  selector: 'app-form-estado_cuenta',
+  templateUrl: './form-estado-cuenta.component.html',
   providers: [MessageService, ConfirmationService],
-  styleUrls: ['./form-profesional.component.css'],
+  styleUrls: ['./form-estado-cuenta.component.css'],
 })
-export class FormProfesionalComponent implements OnInit {
-  @Input() showModalFormProfesional: boolean = false;
+export class FormEstadoCuentaComponent implements OnInit {
+  @Input() showModalEstadoCuenta: boolean = false;
   @Input() tituloForm: string = '';
   @Input() form: any;
   @Input() tipo: string = "N";
   @Output() propagar = new EventEmitter<boolean>();
   @Output() refres = new EventEmitter<Boolean>();
   loading = false;
+
+  @Input() id!: number;
   profesionalForm: FormGroup = new FormGroup({})
   tipo_identificacion$: any = [{ id: 1, descripcion: "Cédula" }, { id: 2, descripcion: "R.U.C." }]
-  lista_titulos$: any = [{ id: 1, descripcion: "Ingenieria en Sistemas Computacionales" }, { id: 2, descripcion: "Ingeniería en Networking" }, { id: 3, descripcion: "Ingenieria en Sistemas Administrativos" }]
+  lista_titulos$: any = [{ id: 1, descripcion: "Ingenieria en Sistemas Computacionales" }, { id: 2, descripcion: "Ingenieria en Networking" }, { id: 3, descripcion: "Ingenieria en Sistemas administrativos" }]
   fecha_ingreso_inicio_mes = addDays(new Date(endOfMonth(new Date())), 1)
   costo_mensual_primera_cuota = 10
   usuario_id = this.authService.getUser().id
+
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -35,34 +40,48 @@ export class FormProfesionalComponent implements OnInit {
   ) {
   }
 
-  setFormReactive(form: any = {}) {
+  setFormReactive() {
     this.profesionalForm = new FormGroup({
-      tipoIdentificacion: new FormControl('', [Validators.required]),
-      identificacion: new FormControl('', [Validators.required]),
-      nombres: new FormControl('', [Validators.required]),
-      apellidos: new FormControl('', [Validators.required]),
-      telefono: new FormControl('', [Validators.maxLength(10)]),
-      fecha_nacimiento: new FormControl(null),
-      direccion: new FormControl('', [Validators.required]),
-      tituloObtenido: new FormControl('', [Validators.required]),
-      codigoSenecyt: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-
-      //datos de cuota y pagos
-      fecha_ingreso: new FormControl(this.fecha_ingreso_inicio_mes, [Validators.required]),
-      valorEfectivo: new FormControl(0),
-      valorTarjetaCredito: new FormControl(0),
-      valorTransferencia: new FormControl(0),
-
-      estado_registro: new FormControl(true),
-      usuario_id: new FormControl(this.usuario_id)
+      nombres: new FormControl(),
+      identificacion: new FormControl(),
+      apellidos: new FormControl(),
+      titulo: new FormControl(),
+      codigo_senecyt: new FormControl(),
+      email: new FormControl(),
+      telefono: new FormControl()
     });
 
   }
 
   ngOnInit(): void {
     this.setFormReactive()
+    this.getEstadoCuenta()
   }
+
+  getEstadoCuenta(): void {
+    this.profesionalService.getEstadoCuenta({ id: this.id }).subscribe({
+      next: response => {
+        console.log(response)
+        this.profesionalForm.patchValue(response.data)
+        // this.setFormReactive(response.data)
+      }, error: (err) => {
+        console.log('err', err)
+        const { error } = err
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.msg });
+        return
+      }
+    })
+  }
+
+
+
+
+
+
+
+
+
+
 
   insertProfesional(): void {
     if (this.profesionalForm.invalid) {
@@ -145,7 +164,7 @@ export class FormProfesionalComponent implements OnInit {
 
   }
   onPropagar(): void {
-    this.showModalFormProfesional = false;
+    this.showModalEstadoCuenta = false;
     this.propagar.emit(false);
   }
 
