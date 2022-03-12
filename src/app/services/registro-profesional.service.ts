@@ -26,6 +26,15 @@ export class RegistroProfesionalService {
         return this.http.post(url, params)
     }
 
+    async getIdentificaciones(params: any = {}) {
+        const url = `${environment.API_URL}/catalogo/tipoIdentificacion/select`
+        return await this.http.post(url, params).toPromise()
+    }
+    async getCarrerasProf(params: any = {}) {
+        const url = `${environment.API_URL}/catalogo/tipoIdentificacion/select`
+        return await this.http.post(url, params).toPromise()
+    }
+
 
 
 
@@ -36,10 +45,7 @@ export class RegistroProfesionalService {
         return this.http.post(url, params)
     }
 
-    selectRoles(params: any = {}): Observable<any> {
-        const url = `${environment.API_URL}/select-perfil`;
-        return this.http.post(url, params)
-    }
+
 
     /**
      * 

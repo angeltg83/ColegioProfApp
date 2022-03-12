@@ -19,7 +19,7 @@
             appendTo="body"
             [filter]="true"
             [showClear]="true"
-            [options]="tipo_identificacion$"
+            [options]="getTiposIdentificaciones$ | async"
             formControlName="tipoIdentificacion"
             placeholder="Seleccione el tipo identificación"
             autoWidth="false"
@@ -164,7 +164,7 @@
             appendTo="body"
             [filter]="true"
             [showClear]="true"
-            [options]="lista_titulos$"
+            [options]="lista_titulos$|async"
             formControlName="tituloObtenido"
             placeholder="Seleccione el título"
             autoWidth="false"
@@ -210,9 +210,7 @@
             type="email"
             placeholder="Ingrese correo electrónico"
             [ngClass]="{
-              'ng-invalid ng-dirty':
-                email?.invalid &&
-                (email?.dirty || email?.touched)
+              'ng-invalid ng-dirty': email?.invalid && (email?.dirty || email?.touched)
             }"
             pInputText
             class="inputfield w-full"
