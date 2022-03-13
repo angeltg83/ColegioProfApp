@@ -34,13 +34,39 @@
         </div>
         <div class="field col-12 md:col-6">
           <label for="nombre">Código senecyt<sup style="color: red">*</sup></label>
-          <input readonly formControlName="codigo_senecyt" id="codi_sene" type="text" pInputText class="inputfield w-full" />
+          <input
+            readonly
+            formControlName="codigo_senecyt"
+            id="codi_sene"
+            type="text"
+            pInputText
+            class="inputfield w-full"
+          />
         </div>
 
         <div class="field col-6">
           <label for="email">Correo electrónico<sup style="color: red">*</sup></label>
           <input readonly formControlName="email" id="email" type="email" pInputText class="inputfield w-full" />
         </div>
+        
+        <table class="table">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>Periodo</th>
+              <th>Valor</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of cuotas">
+              <td>{{ i.id }}</td>
+              <td>{{ i.periodo }}</td>
+              <td>{{ i.valor }}</td>
+              <td>{{ i.estado_cuota }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 

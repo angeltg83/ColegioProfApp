@@ -10,7 +10,6 @@ export class RegistroProfesionalService {
 
     constructor(private http: HttpClient) { }
 
-
     getListRegistroProfesional(params: any): Observable<any> {
         const url = `${environment.API_URL}/administracion/registro/profesional/list`;
         return this.http.post(url, params)
@@ -31,7 +30,7 @@ export class RegistroProfesionalService {
         return await this.http.post(url, params).toPromise()
     }
     async getCarrerasProf(params: any = {}) {
-        const url = `${environment.API_URL}/catalogo/tipoIdentificacion/select`
+        const url = `${environment.API_URL}/catalogo/carreras/select`
         return await this.http.post(url, params).toPromise()
     }
 

@@ -27,11 +27,12 @@ export class FormEstadoCuentaComponent implements OnInit {
   @Input() id!: number;
   profesionalForm: FormGroup = new FormGroup({})
   tipo_identificacion$: any = [{ id: 1, descripcion: "Cédula" }, { id: 2, descripcion: "R.U.C." }]
-  lista_titulos$: any = [{ id: 1, descripcion: "Ingenieria en Sistemas Computacionales" }, { id: 2, descripcion: "Ingenieria en Networking" }, { id: 3, descripcion: "Ingenieria en Sistemas administrativos" }]
+  lista_titulos$!: Promise<any>
+  //lista_titulos$: any = [{ id: 1, descripcion: "Ingenieria en Sistemas Computacionales" }, { id: 2, descripcion: "Ingenieria en Networking" }, { id: 3, descripcion: "Ingenieria en Sistemas administrativos" }]
   fecha_ingreso_inicio_mes = addDays(new Date(endOfMonth(new Date())), 1)
   costo_mensual_primera_cuota = 10
   usuario_id = this.authService.getUser().id
-
+  cuotas: any;
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -48,12 +49,14 @@ export class FormEstadoCuentaComponent implements OnInit {
       titulo: new FormControl(),
       codigo_senecyt: new FormControl(),
       email: new FormControl(),
-      telefono: new FormControl()
+      telefono: new FormControl(),
+
     });
 
   }
 
   ngOnInit(): void {
+    this.lista_titulos$ = this.profesionalService.getCarrerasProf()
     this.setFormReactive()
     this.getEstadoCuenta()
   }
@@ -63,6 +66,7 @@ export class FormEstadoCuentaComponent implements OnInit {
       next: response => {
         console.log(response)
         this.profesionalForm.patchValue(response.data)
+        this.cuotas = response.data.cuotas
         // this.setFormReactive(response.data)
       }, error: (err) => {
         console.log('err', err)
@@ -208,6 +212,5 @@ export class FormEstadoCuentaComponent implements OnInit {
   get valorTransferencia() {
     return this.profesionalForm.get('valorTransferencia');
   }
-
 
 }

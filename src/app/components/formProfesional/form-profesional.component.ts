@@ -60,7 +60,7 @@ export class FormProfesionalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTiposIdentificaciones$ = this.profesionalService.getIdentificaciones()
-    this.lista_titulos$=this.profesionalService.getCarrerasProf()
+    this.lista_titulos$ = this.profesionalService.getCarrerasProf()
     this.setFormReactive()
 
   }
