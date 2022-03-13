@@ -1,0 +1,49 @@
+<p-toast></p-toast>
+<form [formGroup]="perfilForm" (ngSubmit)="onSubmit()">
+  <p-dialog
+    *ngIf="!loading"
+    header="Resetear contraseña"
+    [(visible)]="showModalResetPass"
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="onHide()"
+  >
+    <div class="card">
+      <div class="formgrid grid">
+        <div class="field col-12 md:col-12">
+          <label for="correo">Correo electrónico</label>
+          <div class="p-col-12 p-md-6">
+            <input
+              formControlName="correo"
+              pInputText
+              type="text"
+              placeholder="Ingrese correo registrado"
+              class="inputfield w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty': correo?.invalid && (correo?.dirty || correo?.touched)
+              }"
+            />
+            <div *ngIf="correo?.invalid && (correo?.dirty || correo?.touched)">
+              <small class="text-danger" *ngIf="correo?.errors?.required">Correo es requerido</small>
+              <small class="text-danger" *ngIf="correo?.errors?.email">Correo eléctronico no válido</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cerrar"></p-button>
+      <p-button
+        [disabled]="perfilForm.invalid"
+        type="submit"
+        styleClass="p-button-success"
+        label="Enviar"
+        class="p-button-text"
+        icon="pi pi-send"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
+</form>

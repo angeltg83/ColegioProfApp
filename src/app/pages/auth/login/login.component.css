@@ -1,12 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap");
 .login-form {
   padding: 4rem 1rem;
 }
 
 mat-card {
-  max-width: 300px;
+  max-width: 340px;
   margin: 2rem auto;
   text-align: center;
-  height: 350px;
 }
 
 .full-width-input {
@@ -14,7 +14,7 @@ mat-card {
 }
 
 .separator {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .loginbox-title {
@@ -23,8 +23,8 @@ mat-card {
   width: 100%;
   height: 35px;
   padding-top: 10px;
-  font-family: "Lucida Sans", "trebuchet MS", Arial, Helvetica;
-  font-size: 20px;
+  font-family: "Roboto", "Lucida Sans", "trebuchet MS", Arial, Helvetica;
+  font-size: 25px;
   font-weight: normal;
   color: #444;
 }
@@ -34,7 +34,13 @@ mat-card {
   width: 173px;
 }
 
-.login-box{
-  height: 415px;
-  border: 1px solid #B8B8B8;
+.login-box {
+  height: 470px;
+  border: 1px solid #b8b8b8;
+}
+
+.btn-resetPass{
+  position: relative;
+  bottom: 5px;
+  font-size: 12px;
 }

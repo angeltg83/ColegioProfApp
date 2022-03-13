@@ -1,29 +1,36 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from "@angular/core"
+import { FormBuilder, Validators } from "@angular/forms"
+import { Router } from "@angular/router"
+import { MessageService } from "primeng/api"
+import { Subscription } from "rxjs"
 
-import { AuthService } from '@auth/auth.service';
-import { UserResponse } from '@app/shared/models/user.interfaces';
+import { AuthService } from "@auth/auth.service"
+import { UserResponse } from "@app/shared/models/user.interfaces"
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  providers: [MessageService]
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
+  providers: [MessageService],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   hide = true
   loading: boolean = false
-  private subscripcion: Subscription = new Subscription;
-  loginForm = this.fb.group({ username: ["", Validators.required], contrasena: ["", [Validators.required, Validators.minLength(6)]] })
+  private subscripcion: Subscription = new Subscription()
+  showModalResetPass: boolean = false
+  loginForm = this.fb.group({
+    username: ["", Validators.required],
+    contrasena: ["", [Validators.required, Validators.minLength(6)]],
+  })
 
-  constructor(private authSrv: AuthService, private fb: FormBuilder, private router: Router, private messageService: MessageService) { }
-  ngOnInit(): void {
-
-  }
+  constructor(
+    private authSrv: AuthService,
+    private fb: FormBuilder,
+    private router: Router,
+    private messageService: MessageService
+  ) { }
+  ngOnInit(): void { }
   ngOnDestroy(): void {
-    this.subscripcion.unsubscribe();
+    this.subscripcion.unsubscribe()
   }
   onLogin(): void {
     this.loading = true
@@ -32,35 +39,36 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     const formValue = this.loginForm.value
     this.subscripcion.add(
-      this.authSrv.login(formValue)
-        .subscribe(res => {
+      this.authSrv.login(formValue).subscribe(
+        (res) => {
           console.log(res)
           if (res) {
             // { err: true, msg: "Usuario o contraseña no validos" }
             if (res.err) {
-              console.log('res', res)
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: res.msg });
+              console.log("res", res)
+              this.messageService.add({ severity: "error", summary: "Error", detail: res.msg })
               return
             }
             this.loading = false
-            this.router.navigate([''])
+            this.router.navigate([""])
           }
-
-        }, err => {
+        },
+        (err) => {
           console.log(err)
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err });
+          this.messageService.add({ severity: "error", summary: "Error", detail: err })
           this.loading = false
           return
-        })
+        }
+      )
     )
   }
-
   getErrorMessage(field: string) {
-    let message;
+    let message
     if (this.loginForm.get(field)?.errors?.required) {
-      message = 'Campo requerido'
-    } else if (this.loginForm.get(field)?.hasError('minlength')) {
-      message = 'Campo debe tener más de 6 carácteres'
+
+      message = `${field === 'contrasena' ? 'contraseña' : field} requerido`
+    } else if (this.loginForm.get(field)?.hasError("minlength")) {
+      message = "Campo debe tener más de 6 carácteres"
     }
     return message
   }
@@ -68,4 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     return (this.loginForm.get(field)?.touched || this.loginForm.get(field)?.dirty) && this.loginForm.invalid
   }
 
+  resetContrasena() {
+    this.showModalResetPass = true
+  }
 }

@@ -28,9 +28,10 @@ import { PerfilModule } from '@components/perfil/perfil.module'
 import { UsuarioModule } from '@components/usuario/usuario.module';
 import { PermisoModule } from '@components/permiso/permiso.module';
 import { ModuloModule } from '@components/modulo/modulo.module';
+import { ResetContrasenaModule } from '@components/resetContrasena/resetContrasena.module'
 
 //modules form CITA MEDICA
-import { CitaMedicaModule } from './components/citaMedica/cita-medica.module';
+import { CitaMedicaModule } from '@components/citaMedica/cita-medica.module';
 
 // dialog dinamic
 import { AsignacionPerfilComponent } from '@components/asignacion-perfil/asignacion-perfil.component'
@@ -77,6 +78,7 @@ import { FormEstadoCuentaModule } from '@components/form-estado_cuenta/form-esta
     UsuarioModule,
     PermisoModule,
     ModuloModule,
+    ResetContrasenaModule, 
 
     /**
      * @desc imports modulo citas medicas

@@ -16,6 +16,7 @@ body {
 }
 
 .text-danger {
+  text-align: left;
   font-size: 11px;
   color: red;
 }
