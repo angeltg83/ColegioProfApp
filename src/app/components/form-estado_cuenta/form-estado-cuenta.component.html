@@ -48,25 +48,38 @@
           <label for="email">Correo electrónico<sup style="color: red">*</sup></label>
           <input readonly formControlName="email" id="email" type="email" pInputText class="inputfield w-full" />
         </div>
-        
-        <table class="table">
-          <thead>
-            <tr>
-              <th>id</th>
-              <th>Periodo</th>
-              <th>Valor</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let i of cuotas">
-              <td>{{ i.id }}</td>
-              <td>{{ i.periodo }}</td>
-              <td>{{ i.valor }}</td>
-              <td>{{ i.estado_cuota }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="field col-12 md:col-12">
+          <p-table [value]="cuotas" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>id</th>
+                <th>Período</th>
+                <th>Valor</th>
+                <th>Estado</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-i>
+              <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.periodo }}</td>
+                <td>{{ i.valor | currency }}</td>
+                <td>
+                  <p-tag *ngIf="i.estado_cuota==='PAGADA' else pendiente" styleClass="mr-2" severity="success" value={{i.estado_cuota}}></p-tag>
+                  <ng-template #pendiente>
+                    <p-tag styleClass="mr-2" severity="warning" value={{i.estado_cuota}}></p-tag>
+                  </ng-template>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-i>
+              <tr>
+                  <td colspan="4">
+                      Registros no encontrados
+                  </td>
+              </tr>
+          </ng-template>
+          </p-table>
+        </div>
       </div>
     </div>
 
