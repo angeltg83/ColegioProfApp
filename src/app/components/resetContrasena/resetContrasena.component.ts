@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core"
 import { MessageService, ConfirmationService } from "primeng/api"
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms"
 import { RolesService } from "@app/services/roles.service"
+import { RecuperarContrasenaService } from "@app/services/reset-constrasena.service"
 
 @Component({
   selector: "app-form-reset-contrasena",
@@ -14,22 +15,22 @@ export class ResetContrasenaComponent implements OnInit {
   //@Input() tituloForm: string = '';
   //@Input() form: any;
   //@Input() tipo: string = "N";
-  //@Output() propagar = new EventEmitter<boolean>();
+  @Output() propagar = new EventEmitter<boolean>();
   //@Output() refres = new EventEmitter<Boolean>();
 
   loading = false
-  perfilForm: FormGroup = new FormGroup({})
+  resetForm: FormGroup = new FormGroup({})
 
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private fb: FormBuilder,
-    private rolService: RolesService
+    private rolService: RolesService,
+
+    private recuperarContrasenaService: RecuperarContrasenaService,
   ) { }
 
   setFormReactive(form: any = {}) {
-    this.perfilForm = new FormGroup({
-      id_perfil: new FormControl(form?.id || null),
+    this.resetForm = new FormGroup({
       correo: new FormControl(form?.nombre || "", [Validators.required, Validators.email]),
     })
   }
@@ -43,7 +44,7 @@ export class ResetContrasenaComponent implements OnInit {
   }
 
   insertPerfil(): void {
-    if (this.perfilForm.invalid) {
+    if (this.resetForm.invalid) {
       this.messageService.add({
         severity: "warn",
         summary: "Advertencia",
@@ -52,7 +53,7 @@ export class ResetContrasenaComponent implements OnInit {
       return
     }
 
-    this.rolService.insert({ ...this.perfilForm.value }).subscribe({
+    this.rolService.insert({ ...this.resetForm.value }).subscribe({
       next: ({ msg }) => {
         this.messageService.add({ severity: "success", summary: "Exito", detail: msg })
       },
@@ -71,15 +72,15 @@ export class ResetContrasenaComponent implements OnInit {
   }
 
   updatePerfil(): void {
-    if (this.perfilForm.invalid) {
+    if (this.resetForm.invalid) {
       this.messageService.add({
         severity: "warn",
         summary: "Advertencia",
         detail: "Hay campos obligatorios requeridos",
       })
     }
-    //const {id_perfil} = this.perfilForm.value
-    this.rolService.update({ ...this.perfilForm.value }).subscribe({
+    //const {id_perfil} = this.resetForm.value
+    this.rolService.update({ ...this.resetForm.value }).subscribe({
       next: (response: any) => {
         const { msg } = response
         this.messageService.add({ severity: "success", summary: "Exito", detail: msg })
@@ -93,7 +94,18 @@ export class ResetContrasenaComponent implements OnInit {
     })
   }
   onSubmit(): void {
-    console.log(this.perfilForm.valid)
+    console.log(this.resetForm.valid)
+    this.recuperarContrasenaService.sendCorreoRecuperar({ ...this.resetForm.value }).subscribe({
+      next: (response: any) => {
+        const { msg } = response
+        this.messageService.add({ severity: "success", summary: "Exito", detail: msg })
+      },
+      complete: () => {
+        setTimeout(() => {
+          this.onHide()
+        }, 1200)
+      },
+    })
     // if (this.tipo === 'N') {
     //   this.insertPerfil()
     // } else {
@@ -102,8 +114,8 @@ export class ResetContrasenaComponent implements OnInit {
     // }
   }
   onPropagar(): void {
-    //this.propagar.emit(false);
-    //this.showModalResetPass = false;
+    this.propagar.emit(false);
+    this.showModalResetPass = false;
   }
 
   onRefresGrid(): void {
@@ -114,6 +126,6 @@ export class ResetContrasenaComponent implements OnInit {
     this.onPropagar()
   }
   get correo() {
-    return this.perfilForm.get("correo")
+    return this.resetForm.get("correo")
   }
 }

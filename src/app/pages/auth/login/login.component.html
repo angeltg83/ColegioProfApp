@@ -75,4 +75,7 @@
   </mat-card>
 </div>
 
-<app-form-reset-contrasena [showModalResetPass]="showModalResetPass"></app-form-reset-contrasena>
+<app-form-reset-contrasena
+  [showModalResetPass]="showModalResetPass"
+  (propagar)="getStaus($event)"
+></app-form-reset-contrasena>

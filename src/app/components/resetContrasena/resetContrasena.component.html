@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<form [formGroup]="perfilForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="resetForm" (ngSubmit)="onSubmit()">
   <p-dialog
     *ngIf="!loading"
     header="Resetear contraseña"
@@ -37,7 +37,7 @@
     <ng-template pTemplate="footer">
       <p-button styleClass="p-button-secondary" (click)="onPropagar()" label="Cerrar"></p-button>
       <p-button
-        [disabled]="perfilForm.invalid"
+        [disabled]="resetForm.invalid"
         type="submit"
         styleClass="p-button-success"
         label="Enviar"

@@ -79,4 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   resetContrasena() {
     this.showModalResetPass = true
   }
+  getStaus(status: boolean) {
+    this.showModalResetPass = status
+  }
 }
